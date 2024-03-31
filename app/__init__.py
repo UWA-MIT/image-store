@@ -13,6 +13,9 @@ from logging.handlers import RotatingFileHandler
 
 db = SQLAlchemy()
 migrate = Migrate()
+login = LoginManager()
+login.login_view = 'auth.login'
+login.login_message = 'Please log in to access this page.'
 mail = Mail()
 moment = Moment()
 
@@ -24,6 +27,7 @@ def create_app(config_class=Config):
 
 	db.init_app(app)
 	migrate.init_app(app, db)
+	login.init_app(app)
 	mail.init_app(app)
 	moment.init_app(app)
 
@@ -72,4 +76,4 @@ def create_app(config_class=Config):
 
 	return app
 
-from app import models
+
