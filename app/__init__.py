@@ -2,7 +2,7 @@ import os
 import logging
 from flask_login import LoginManager
 from flask import Flask, current_app, request
-from config import Config
+from config import Config, TestConfig
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_mail import Mail
@@ -22,6 +22,9 @@ moment = Moment()
 
 
 def create_app(config_class=Config):
+	if os.environ.get('FLASK_CONFIG') == 'test':
+		config_class = TestConfig
+		print("!!! TestConfig !!!")
 	app = Flask(__name__)
 	app.config.from_object(config_class)
 
@@ -40,6 +43,9 @@ def create_app(config_class=Config):
 
 	from app.auth import bp as auth_bp
 	app.register_blueprint(auth_bp, url_prefix='/auth')
+
+	from app.products import bp as products_bp
+	app.register_blueprint(products_bp, url_prefix='/products')
 
 
 	if not app.debug:
