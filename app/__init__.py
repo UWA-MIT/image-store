@@ -2,7 +2,7 @@ import os
 import logging
 from flask_login import LoginManager
 from flask import Flask, current_app, request
-from config import Config
+from config import Config, TestConfig
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_mail import Mail
@@ -22,6 +22,9 @@ moment = Moment()
 
 
 def create_app(config_class=Config):
+	if os.environ.get('FLASK_CONFIG') == 'test':
+		config_class = TestConfig
+		print("!!! TestConfig !!!")
 	app = Flask(__name__)
 	app.config.from_object(config_class)
 
