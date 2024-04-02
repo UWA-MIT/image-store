@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 basedir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(basedir, '.env'))
 
+os.environ['FLASK_CONFIG'] = ''
+
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or '52e4da2524c9580fd6bcff60fab06189'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
@@ -18,3 +20,8 @@ class Config:
     ADMINS = ['admin@student.uwa.edu.au']
     
     POSTS_PER_PAGE=10
+
+class TestConfig(Config):
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'tests/test.db')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
