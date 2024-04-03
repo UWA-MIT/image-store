@@ -36,6 +36,15 @@ class Test(unittest.TestCase):
         self.assertTrue(user1.check_password('test123'))
         self.assertTrue(user2.check_password('test456'))
 
+    def testResetPasswordToken(self):
+        user1 = db.session.get(User, 1)
+        user2 = db.session.get(User, 2)
+        user1.set_password('test123')
+        user2.set_password('test456')
+        self.assertTrue(user1.username == user1.verify_reset_password_token(user1.get_reset_password_token()).username)
+        self.assertTrue(user2.username == user2.verify_reset_password_token(user2.get_reset_password_token()).username)
+
+
 
 if __name__ == '__main__':
     unittest.main()
