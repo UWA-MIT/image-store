@@ -35,11 +35,7 @@ class Test(unittest.TestCase):
         self.driver.quit()
 
     def testLoginAndLogout(self):
-        user = User(username = 'Konstantin', email = '24090236@student.uwa.edu.au')
-        user.set_password('test123')
-        db.session.add(user)
-        db.session.commit()
-        user = db.session.get(User, 1)
+        user = self.getTestUser()
         self.driver.get('http://127.0.0.1:5000/auth/login')
         username = self.driver.find_element(By.ID, "username")
         password = self.driver.find_element(By.ID, "password")
@@ -88,13 +84,14 @@ class Test(unittest.TestCase):
         self.assertTrue(user.check_password('test123'))
 
     def testResetPassword(self):
+        user = self.getTestUser()
         self.driver.get('http://127.0.0.1:5000/auth/login')
         reset = self.driver.find_element(By.ID, "resetPassword")
         reset.click()
         email = WebDriverWait(self.driver, 10).until(
             EC.visibility_of_element_located((By.ID, "email"))
         )
-        email.send_keys('24090236@student.uwa.edu.au')
+        email.send_keys(user.email)
         submit = self.driver.find_element(By.ID, "submit")
         submit.click()
         element = WebDriverWait(self.driver, 10).until(
@@ -105,11 +102,7 @@ class Test(unittest.TestCase):
         assert expected_text == actual_text, f"Expected text '{expected_text}' did not match actual text '{actual_text}'."
 
     def testChangePassword(self):
-        user = User(username = 'Konstantin', email = '24090236@student.uwa.edu.au')
-        user.set_password('test123')
-        db.session.add(user)
-        db.session.commit()
-        user = db.session.get(User, 1)
+        user = self.getTestUser()
         self.driver.get('http://127.0.0.1:5000/auth/login')
         username = self.driver.find_element(By.ID, "username")
         password = self.driver.find_element(By.ID, "password")
@@ -138,3 +131,10 @@ class Test(unittest.TestCase):
         expected_text = "Your password has been changed."
         actual_text = element.text
         assert expected_text == actual_text, f"Expected text '{expected_text}' did not match actual text '{actual_text}'."
+
+    def getTestUser(self):
+        user = User(username = 'Konstantin', email = '24090236@student.uwa.edu.au')
+        user.set_password('test123')
+        db.session.add(user)
+        db.session.commit()
+        return db.session.get(User, 1)
