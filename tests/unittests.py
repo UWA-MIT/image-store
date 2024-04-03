@@ -43,6 +43,8 @@ class Test(unittest.TestCase):
         user2.set_password('test456')
         self.assertTrue(user1.username == user1.verify_reset_password_token(user1.get_reset_password_token()).username)
         self.assertTrue(user2.username == user2.verify_reset_password_token(user2.get_reset_password_token()).username)
+        self.assertFalse(user1.username == user1.verify_reset_password_token(user2.get_reset_password_token()).username)
+        self.assertFalse(user2.username == user2.verify_reset_password_token(user1.get_reset_password_token()).username)
 
 
 
