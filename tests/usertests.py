@@ -1,5 +1,5 @@
 # Run the app with FLASK_CONFIG = 'test' before running the test.
-# cd tests -> python -m unittest usertests.py
+# cd tests -> python -m unittest usertests.py, python -m unittest usertests.Test.testEditProfile
 import unittest, sys
 sys.path.append('../')
 from config import TestConfig
@@ -35,22 +35,8 @@ class Test(unittest.TestCase):
         self.driver.quit()
 
     def testLoginAndLogout(self):
-        user = self.getTestUser()
-        self.driver.get('http://127.0.0.1:5000/auth/login')
-        username = self.driver.find_element(By.ID, "username")
-        password = self.driver.find_element(By.ID, "password")
-        submit = self.driver.find_element(By.ID, "submit")
-        username.send_keys(user.username)
-        password.send_keys('test123')
-        submit.click()
-        element_xpath = f"//*[contains(text(), 'Hello, {user.username}!')]"
-        element = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, element_xpath))
-        )
-        expected_text = f"Hello, {user.username}!"
-        actual_text = element.text
-        assert expected_text == actual_text, f"Expected text '{expected_text}' did not match actual text '{actual_text}'."
-
+        user = self.createUser()
+        self.login(user)
         logout = self.driver.find_element(By.ID, "logout")
         logout.click()
         username = WebDriverWait(self.driver, 10).until(
@@ -77,14 +63,14 @@ class Test(unittest.TestCase):
         password.send_keys('test123')
         password2.send_keys('test123')
         submit.click()
-        user = db.session.get(User, 1)
+        user = self.getUserById(1)
         self.assertTrue(user.username == 'Konstantin')
         self.assertTrue(user.name == 'KonstantinTagintsev')
         self.assertTrue(user.email == '24090236@student.uwa.edu.au')
         self.assertTrue(user.check_password('test123'))
 
     def testResetPassword(self):
-        user = self.getTestUser()
+        user = self.createUser()
         self.driver.get('http://127.0.0.1:5000/auth/login')
         reset = self.driver.find_element(By.ID, "resetPassword")
         reset.click()
@@ -102,18 +88,8 @@ class Test(unittest.TestCase):
         assert expected_text == actual_text, f"Expected text '{expected_text}' did not match actual text '{actual_text}'."
 
     def testChangePassword(self):
-        user = self.getTestUser()
-        self.driver.get('http://127.0.0.1:5000/auth/login')
-        username = self.driver.find_element(By.ID, "username")
-        password = self.driver.find_element(By.ID, "password")
-        submit = self.driver.find_element(By.ID, "submit")
-        username.send_keys(user.username)
-        password.send_keys('test123')
-        submit.click()
-        element_xpath = f"//*[contains(text(), 'Hello, {user.username}!')]"
-        WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, element_xpath))
-        )
+        user = self.createUser()
+        self.login(user)
         self.driver.get('http://127.0.0.1:5000/auth/change_password')
         current_password = WebDriverWait(self.driver, 10).until(
             EC.visibility_of_element_located((By.ID, "current_password"))
@@ -132,9 +108,58 @@ class Test(unittest.TestCase):
         actual_text = element.text
         assert expected_text == actual_text, f"Expected text '{expected_text}' did not match actual text '{actual_text}'."
 
-    def getTestUser(self):
-        user = User(username = 'Konstantin', email = '24090236@student.uwa.edu.au')
+    def testViewProfile(self):
+        user = self.createUser()
+        self.login(user)
+        self.driver.get('http://127.0.0.1:5000/users/user/' + user.username)
+        username = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, "#profile .username"))
+        )
+        expected_text = user.username
+        actual_text = username.text
+        assert expected_text == actual_text, f"Expected username '{expected_text}' did not match actual username '{actual_text}'."
+
+    def testEditProfile(self):
+        user = self.createUser()
+        self.login(user)
+        self.driver.get('http://127.0.0.1:5000/users/edit_profile')
+        aboutMe = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located((By.ID, "about_me"))
+        )
+        submit = self.driver.find_element(By.ID, "submit")
+        aboutMe.send_keys('testAboutMe')
+        submit.click()
+        aboutMe = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, "#profile .about-me"))
+        )
+        user = self.refreshUser(user)
+        expected_text = 'Bio: ' + user.about_me
+        actual_text = aboutMe.text
+        assert expected_text == actual_text, f"Expected about_me '{expected_text}' did not match actual about_me '{actual_text}'."
+
+    def createUser(self):
+        user = User(username = 'Konstantin', email = '24090236@student.uwa.edu.au', about_me='lal')
         user.set_password('test123')
         db.session.add(user)
         db.session.commit()
-        return db.session.get(User, 1)
+        return self.getUserById(1)
+
+    def getUserById(self, id):
+        return db.session.get(User, id)
+
+    def refreshUser(self, user):
+        db.session.refresh(user)
+        return db.session.get(User, user.id)
+
+    def login(self, user):
+        self.driver.get('http://127.0.0.1:5000/auth/login')
+        username = self.driver.find_element(By.ID, "username")
+        password = self.driver.find_element(By.ID, "password")
+        submit = self.driver.find_element(By.ID, "submit")
+        username.send_keys(user.username)
+        password.send_keys('test123')
+        submit.click()
+        element_xpath = f"//*[contains(text(), 'Hello, {user.username}!')]"
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, element_xpath))
+        )

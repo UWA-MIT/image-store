@@ -3,7 +3,7 @@
 {% block content %}
 
 
-<section class="xh-100 gradient-custom-2">
+<section id="profile" class="xh-100 gradient-custom-2">
   <div class="container py-5 xh-100" style="padding-top: 1rem!important">
     <div class="row d-flex justify-content-center align-items-center xh-100x">
       <div class="col col-lg-12 col-xl-12">
@@ -19,7 +19,7 @@
             </div>
             <div class="ms-3" style="margin-top: 130px; color: #333;">
               <h5>{{ user.name }}</h5>
-              <p>{{ user.username }}</p>
+              <p class="username">{{ user.username }}</p>
             </div>
           </div>
           <div class="p-4 text-black" style="background-color: #f8f9fa;">
@@ -42,16 +42,11 @@
             <div class="mb-5">
               <p class="lead fw-normal mb-1">About</p>
               <div class="p-4" style="background-color: #f8f9fa;">
-                <p class="font-italic mb-1">{% if user.about_me %}Bio: {{ user.about_me }} {% endif %}</p>
+                <p class="font-italic mb-1 about-me">{% if user.about_me %}Bio: {{ user.about_me }} {% endif %}</p>
                 <p class="font-italic mb-1">{% if user.email %} Email: {{ user.email }} {% endif %}</p>
                 <p class="font-italic mb-0">{% if user.last_seen %} Last seen on: {{ user.last_seen }} {% endif %}</p>
-
               </div>
             </div>
-            
-
-            
-
           </div>
         </div>
       </div>
