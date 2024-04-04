@@ -57,6 +57,15 @@ class User(UserMixin, db.Model):
         except:
             return
         return db.session.get(User, id)
+    
+
+    def get_image_count(self, user_id):
+        
+        return 0
+
+    def get_purchase_count(self, user_id):
+
+        return 0
 
 
 
