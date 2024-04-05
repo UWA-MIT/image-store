@@ -64,8 +64,9 @@ docker exec -it store-app python -m flask run --host=0.0.0.0 --debug
 ```
 Access the app at: http://localhost:5000
 
-
+Test email in development server:
 ```
+pip install aiosmtpd
 aiosmtpd -n -c aiosmtpd.handlers.Debugging -l localhost:8025
 ```
 
@@ -88,10 +89,12 @@ python -m unittest usertests.py
 
 ## References:
 
-https://getbootstrap.com/docs/4.0/examples/jumbotron/
-https://geeksui.codescandy.com/geeks/index.html
-https://mdbootstrap.com/docs/standard/extended/profiles/
-https://pypi.org/project/selenium/
+We have learned, explored and followed following articles, samples and examples in our project. 
+
+- https://getbootstrap.com/docs/4.0/examples/jumbotron/
+- https://geeksui.codescandy.com/geeks/index.html
+- https://mdbootstrap.com/docs/standard/extended/profiles/
+- https://pypi.org/project/selenium/
 
 ## License Info
 
