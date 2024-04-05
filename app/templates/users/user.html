@@ -6,15 +6,15 @@
 <section id="profile" class="xh-100 gradient-custom-2">
   <div class="container py-5 xh-100" style="padding-top: 1rem!important">
     <div class="row d-flex justify-content-center align-items-center xh-100x">
-      <div class="col col-lg-12 col-xl-12">
+      <div class="col col-lg-12 col-xl-12 area">
         <div class="card-none">
-          <div class="rounded-top-none text-white d-flex flex-row" style="background-color: #E9EAEB; height:200px;">
-            <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+          <div class="rounded-top-none text-white d-flex flex-row profile-bg1">
+            <div class="ms-4 mt-5 d-flex flex-column text-center" style="width: 150px;">
               <img src="{{ user.avatar(150) }}"
-                alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2 avatar"
                 style="width: 150px; z-index: 1">
               
-              <a class="btn btn-outline-dark" data-mdb-ripple-color="dark"
+              <a class="mb-2" data-mdb-ripple-color="dark"
                 style="z-index: 1;" href="{{ url_for('users.edit_profile') }}">Edit profile</a>
             </div>
             <div class="ms-3" style="margin-top: 130px; color: #333;">
@@ -22,7 +22,7 @@
               <p class="username">{{ user.username }}</p>
             </div>
           </div>
-          <div class="p-4 text-black" style="background-color: #f8f9fa;">
+          <div class="p-4 text-black profile-bg2">
             <div class="d-flex justify-content-end text-center py-1">
               <div>
                 <p class="mb-1 h5">{{ image_count }}</p>
@@ -40,8 +40,8 @@
           </div>
           <div class="card-body-none p-4-none text-black" style="margin-top: 1.5rem">
             <div class="mb-5">
-              <p class="lead fw-normal mb-1">About</p>
-              <div class="p-4" style="background-color: #f8f9fa;">
+              <p class="lead fw-normal mb-1 text-white">About</p>
+              <div class="p-4 profile-bg3">
                 <p class="font-italic mb-1 about-me">{% if user.about_me %}Bio: {{ user.about_me }} {% endif %}</p>
                 <p class="font-italic mb-1">{% if user.email %} Email: {{ user.email }} {% endif %}</p>
                 <p class="font-italic mb-0">{% if user.last_seen %} Last seen on: {{ user.last_seen }} {% endif %}</p>
