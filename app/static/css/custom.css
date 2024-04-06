@@ -201,3 +201,6 @@ textarea {
     pointer-events: none;
     color: rgba(233, 236, 239, 0.74);
 }
+.product-listing nav {
+    margin-top: 15px;
+}
