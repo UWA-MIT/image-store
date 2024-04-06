@@ -182,3 +182,25 @@ textarea {
     background-color: #22152c;
     color: white !important;
 }
+.product-listing .area {
+    padding: 5px !important;
+    width: 13rem;
+    display: inline-block;
+    margin: 0 15px 15px 0 !important;
+    color: white;
+}
+.product-listing .area img {
+    object-fit: cover;
+    object-position: top;
+    max-height: 150px;
+}
+.card-footer {
+    border-top: 1px solid #ffffff29;
+}
+.product-listing .pagination .disabled a {
+    pointer-events: none;
+    color: rgba(233, 236, 239, 0.74);
+}
+.product-listing nav {
+    margin-top: 15px;
+}
