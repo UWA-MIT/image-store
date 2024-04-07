@@ -1,4 +1,4 @@
-            <div class="card area">
+            <div data-id="{{ product.id }}" class="card area">
               <img alt="{{ product.name }}" class="card-img-top" src="{{ url_for('static', filename='images/nfts/image' ~  (range(1, 3) | random) + '.jpg') }}" />
               <div class="card-body">
                 <h6 class="card-title">{{ product.name | truncate(10)}}</h6>
@@ -17,7 +17,7 @@
                   </div>
                   <div class="col-auto">
                     {% if product.is_sold == False %}
-                        <a href="#" class="pretty-btn nav-link btn-sm">Buy</a>
+                        <button onclick="transferDataToModal(this)" data-id="{{ product.id }}" data-name="{{ product.name }}" data-price="{{ product.price | round | int }}" type="button" class="pretty-btn nav-link btn-sm" data-bs-toggle="modal" data-bs-target="#buyModal">Buy</button>
                     {% endif %}
                   </div>
                 </div>
