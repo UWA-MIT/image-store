@@ -1,13 +1,8 @@
-
 from flask import render_template, flash, redirect, url_for, request, current_app, jsonify
-from urllib.parse import urlsplit
-from datetime import datetime, timezone
+from datetime import datetime
 import sqlalchemy as sa
 from  sqlalchemy.orm  import joinedload
 from sqlalchemy.sql.operators import like_op
-
-
-# from app import app
 
 from app import db
 from app.models.product import Product
@@ -15,39 +10,9 @@ from app.models.user import User
 from app.products import bp
 
 
-from flask_login import current_user, login_user, logout_user, login_required
+from flask_login import current_user, login_required
 from app.products.forms import GenerateProductForm
 
-
-@bp.route('/')
-@bp.route('/index')
-@login_required
-def index():
-
-    searchString = request.args.get('q')
-    page = request.args.get('page', 1, type=int)
-    q = None
-    title = 'Buy'
-
-    if (searchString):
-        query = sa.select(Product, User).join(User, User.id == Product.seller_id).where(Product.is_sold == False, \
-                        like_op(Product.name, '%' + searchString + '%')).order_by(Product.timestamp.desc())
-        q = searchString
-        title = "Search: " + q
-    else:
-        query = sa.select(Product, User).join(User, User.id == Product.seller_id).where(Product.is_sold == False).order_by(Product.timestamp.desc())
-
-    products = db.paginate(query, page=page, per_page=current_app.config['POSTS_PER_PAGE'], error_out=False)
-
-
-
-    next_url = url_for('products.index', q=q, page=products.next_num) \
-        if products.has_next else None
-    prev_url = url_for('products.index', q=q, page=products.prev_num) \
-        if products.has_prev else None
-    return render_template('products/index.html', title=title,
-                           products=products.items, next_url=next_url,
-                           prev_url=prev_url)
 
 @bp.route('/sell')
 @login_required
@@ -90,8 +55,6 @@ def generate_product():
 
     return render_template('products/generate_product.html', title='Generate Product',
                            form=form)
-
-
 
 
 @bp.route('/buy')
