@@ -18,3 +18,9 @@ class Product(db.Model):
     buyer_id = sa.Column(sa.Integer, sa.ForeignKey('user.id'), index=True, default=None, nullable=True)
 
     seller = so.relationship('User', foreign_keys=[seller_id], backref='products_selling')
+
+    def generate_image(name):
+
+        # Implement AI image generation logic here
+        
+        return None

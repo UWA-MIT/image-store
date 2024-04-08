@@ -19,6 +19,8 @@ class Config:
     
     POSTS_PER_PAGE=10
 
+    REWARD_POINTS_FOR_GENERATE_PRODUCT=5
+
 class TestConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'tests/test.db')
