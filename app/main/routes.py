@@ -18,18 +18,7 @@ def before_request():
 @bp.route('/index')
 @login_required
 def index():
-    user = {'username': 'Miguel'}
-    posts = [
-        {
-            'author': {'username': 'John'},
-            'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': {'username': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
-    return render_template('main/index.html', title='Home', user=user, posts=posts)
+    return render_template('main/index.html')
 
 
 
