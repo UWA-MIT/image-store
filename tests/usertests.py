@@ -10,8 +10,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support.ui import Select
+import os
 
 app = create_app(TestConfig)
+basedir = os.path.abspath(os.path.dirname(__file__))
+
 
 class Test(unittest.TestCase):
     def setUp(self):
@@ -136,6 +140,40 @@ class Test(unittest.TestCase):
         expected_text = 'Bio: ' + user.about_me
         actual_text = aboutMe.text
         assert expected_text == actual_text, f"Expected about_me '{expected_text}' did not match actual about_me '{actual_text}'."
+
+    def testGenerateImage(self):
+        user = self.createUser()
+        self.login(user)
+        self.driver.get('http://127.0.0.1:5000/products/generate_product')
+        name = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located((By.ID, "name"))
+        )
+        dropdown = Select(self.driver.find_element(By.ID, "category"))
+        price = self.driver.find_element(By.ID, "price")
+        submit = self.driver.find_element(By.ID, "submit")
+        name.send_keys('Lambo')
+        dropdown.select_by_value("car")
+        price.send_keys('100')
+        submit.click()
+
+        product = WebDriverWait(self.driver, 20).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, ".product-listing .card.area"))
+        )
+        element = product.find_element(By.CSS_SELECTOR, ".card-title")
+        expected_text = 'LAMBO (CAR)'
+        actual_text = element.text
+        assert expected_text == actual_text, f"Expected name and category '{expected_text}' did not match actual name and category '{actual_text}'."
+
+        element = product.find_element(By.CSS_SELECTOR, ".card-text .price")
+        expected_text = '$100.0'
+        actual_text = element.text
+        assert expected_text == actual_text, f"Expected price '{expected_text}' did not match actual price '{actual_text}'."
+
+        element = product.find_element(By.CSS_SELECTOR, ".card-img-top")
+        path = os.path.join(basedir, '../app/static/images/nft/' + element.get_attribute("src").split('/')[-1])
+        print(path)
+        os.remove(path)
+
 
     def createUser(self):
         user = User(username = 'Konstantin', email = '24090236@student.uwa.edu.au', about_me='lal')

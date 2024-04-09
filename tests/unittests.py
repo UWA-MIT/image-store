@@ -4,9 +4,11 @@ sys.path.append('../')
 from config import TestConfig
 from app import create_app, db
 from app.models.user import User
-# from app.models.product import Product
+from app.models.product import Product
+import os
 
 app = create_app(TestConfig)
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Test(unittest.TestCase):
     def setUp(self):
@@ -16,8 +18,12 @@ class Test(unittest.TestCase):
         db.create_all()
         user1 = User(username='Konstantin', email='24090236@student.uwa.edu.au')
         user2 = User(username='Ivan', email='test@mail.ru')
+        product1 = Product(name='Lanbo', category='Car', price=100)
+        product2 = Product(name='Small', category='Ant', price=100)
         db.session.add(user1)
         db.session.add(user2)
+        db.session.add(product1)
+        db.session.add(product2)
         db.session.commit()
 
     def tearDown(self):
@@ -46,6 +52,14 @@ class Test(unittest.TestCase):
         self.assertTrue(user2.username == user2.verify_reset_password_token(user2.get_reset_password_token()).username)
         self.assertFalse(user1.username == user1.verify_reset_password_token(user2.get_reset_password_token()).username)
         self.assertFalse(user2.username == user2.verify_reset_password_token(user1.get_reset_password_token()).username)
+
+    def testGenerateImage(self):
+        product1 = db.session.get(Product, 1)
+        filename = product1.generate_image(product1.category)
+        path = os.path.join(basedir, '../app/static/images/nft/' + filename)
+        self.assertTrue(os.path.exists(path))
+        self.assertFalse(os.path.exists(path + 'lal'))
+        os.remove(path)
 
 
 if __name__ == '__main__':
