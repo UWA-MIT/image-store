@@ -5,11 +5,7 @@ import jwt
 
 from datetime import datetime, timezone
 from time import time
-from typing import Optional
-
 import sqlalchemy as sa
-import sqlalchemy.orm as so
-from sqlalchemy import func
 from flask import current_app
 from app import db
 from app import login
@@ -66,7 +62,6 @@ class User(UserMixin, db.Model):
     def get_purchase_count(self, user_id):
 
         return 0
-
 
 
 
