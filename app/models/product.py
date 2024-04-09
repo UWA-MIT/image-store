@@ -27,8 +27,9 @@ class Product(db.Model):
     seller = so.relationship('User', foreign_keys=[seller_id], backref='products_selling')
 
     def generate_image(self, category):
-        client = OpenAI()
-        client.api_key = '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'
+        client = OpenAI(
+            api_key='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'
+        )
         response = client.images.generate(
             model="dall-e-2",
             prompt=category,
