@@ -1,8 +1,6 @@
 from flask import render_template, flash, redirect, url_for, request, current_app, jsonify
 from datetime import datetime
 import sqlalchemy as sa
-from  sqlalchemy.orm  import joinedload
-from sqlalchemy.sql.operators import like_op
 
 from app import db
 from app.models.product import Product
@@ -90,3 +88,20 @@ def buy_product(product_id):
     user.reward_points = user.reward_points - int(round(product.price))
     db.session.commit()
     return jsonify({"success": True, "message": "Congratulations, your product purchase has been completed successfully!"}), 200
+
+@bp.route('/my_purchases')
+@login_required
+def my_purchases():
+    page = request.args.get('page', 1, type=int)
+
+    query = sa.select(Product, User).join(User, User.id == Product.seller_id).where(Product.is_sold == True, Product.buyer_id == current_user.id).order_by(Product.timestamp.desc())
+
+    products = db.paginate(query, page=page, per_page=current_app.config['POSTS_PER_PAGE'], error_out=False)
+
+    next_url = url_for('products.my_purchases', page=products.next_num) \
+        if products.has_next else None
+    prev_url = url_for('products.my_purchases', page=products.prev_num) \
+        if products.has_prev else None
+    return render_template('products/my_purchases.html', title='My purchases',
+                           products=products.items, next_url=next_url,
+                           prev_url=prev_url)
