@@ -62,16 +62,16 @@ class Test(unittest.TestCase):
         password = self.driver.find_element(By.ID, "password")
         password2 = self.driver.find_element(By.ID, "password2")
         submit = self.driver.find_element(By.ID, "submit")
-        username.send_keys('Konstantin')
+        username.send_keys('Konstantin2')
         name.send_keys('KonstantinTagintsev')
-        email.send_keys('24090236@student.uwa.edu.au')
+        email.send_keys('240902362@student.uwa.edu.au')
         password.send_keys('test123')
         password2.send_keys('test123')
         submit.click()
         user = self.getUserById(1)
-        self.assertTrue(user.username == 'Konstantin')
+        self.assertTrue(user.username == 'Konstantin2')
         self.assertTrue(user.name == 'KonstantinTagintsev')
-        self.assertTrue(user.email == '24090236@student.uwa.edu.au')
+        self.assertTrue(user.email == '240902362@student.uwa.edu.au')
         self.assertTrue(user.check_password('test123'))
 
     def testResetPassword(self):
@@ -217,6 +217,25 @@ class Test(unittest.TestCase):
         product1, product2 = self.createProducts(1, 1, True)
         self.login(user)
         self.driver.get('http://127.0.0.1:5000/products/my_purchases')
+
+        product = WebDriverWait(self.driver, 20).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, ".product-listing .card.area[data-id='" + str(product1.id) + "']"))
+        )
+        element = product.find_element(By.CSS_SELECTOR, ".card-title")
+        expected_text = product1.name.upper() + ' (' + product1.category.upper() + ')'
+        actual_text = element.text
+        assert expected_text == actual_text, f"Expected name and category '{expected_text}' did not match actual name and category '{actual_text}'."
+
+        element = product.find_element(By.CSS_SELECTOR, ".card-text .price")
+        expected_text = '$' + str(product1.price)
+        actual_text = element.text
+        assert expected_text == actual_text, f"Expected price '{expected_text}' did not match actual price '{actual_text}'."
+
+    def testSellPage(self):
+        user = self.createUser()
+        product1, product2 = self.createProducts(1)
+        self.login(user)
+        self.driver.get('http://127.0.0.1:5000/products/sell')
 
         product = WebDriverWait(self.driver, 20).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, ".product-listing .card.area[data-id='" + str(product1.id) + "']"))
