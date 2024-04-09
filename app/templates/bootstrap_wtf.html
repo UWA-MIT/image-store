@@ -14,7 +14,7 @@
     {%- endfor %}
   {%- elif field.type == 'SelectField' %}
     {{ field.label(class='form-label fs-5') }}
-    {{ field(class='form-select mb-3') }}
+    {{ field(class='mb-3') }}
   {%- elif field.type == 'TextAreaField' %}
   <div class="mb-3">
     {{ field.label(class='form-label fs-5') }}

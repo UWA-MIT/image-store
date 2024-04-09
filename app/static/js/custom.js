@@ -1,3 +1,10 @@
+$(document).ready(function() {
+    $('form').on('submit', function() {
+        const submit = $('#submit');
+        submit.prop('disabled', true);
+        submit.text('Loading...');
+    });
+});
 function transferDataToModal(elem) {
     const id = elem.getAttribute('data-id');
     const name = elem.getAttribute('data-name');
