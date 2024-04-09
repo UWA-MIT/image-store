@@ -1,7 +1,7 @@
 import os
 import logging
 from flask_login import LoginManager
-from flask import Flask, current_app, request
+from flask import Flask
 from config import Config, TestConfig
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -47,6 +47,8 @@ def create_app(config_class=Config):
 	from app.auth import bp as auth_bp
 	app.register_blueprint(auth_bp, url_prefix='/auth')
 
+	from app.products import bp as product_bp
+	app.register_blueprint(product_bp, url_prefix='/products')
 
 	if not app.debug:
 
