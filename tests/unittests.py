@@ -4,6 +4,7 @@ sys.path.append('../')
 from config import TestConfig
 from app import create_app, db
 from app.models.user import User
+# from app.models.product import Product
 
 app = create_app(TestConfig)
 
@@ -46,7 +47,31 @@ class Test(unittest.TestCase):
         self.assertFalse(user1.username == user1.verify_reset_password_token(user2.get_reset_password_token()).username)
         self.assertFalse(user2.username == user2.verify_reset_password_token(user1.get_reset_password_token()).username)
 
+    # def set(self):
+    #     self.app = app.test_client()
+    #     self.app_context = app.app_context()
+    #     self.app_context.push()
+    #     db.create_all()
+    #     product = Product(
+    #         name="Test Product",
+    #         image="test_image.png",
+    #         description="Testing Image",
+    #         price=10.99,
+    #         seller_id=1
+    #     )
+    #     db.session.add(product)
+    #     db.session.commit()
 
+    # def test_create_product(self):
+    #     product = db.session.get(Product,1)
+    #     self.assertEqual(product.name, "Test Product")
+    #     self.assertEqual(product.image, "test_image.png")
+    #     self.assertEqual(product.description, "Testing Image")
+    #     self.assertEqual(product.price, 10.99)
+    #     self.assertFalse(product.is_sold)
+    #     self.assertIsNone(product.sold_at)
+    #     self.assertEqual(product.seller_id, 1)
+    #     self.assertIsNone(product.buyer_id)
 
 if __name__ == '__main__':
     unittest.main()
