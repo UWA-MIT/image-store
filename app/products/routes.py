@@ -38,7 +38,11 @@ def generate_product():
     form = GenerateProductForm()
     if form.validate_on_submit():
         product = Product(name=form.name.data, category=form.category.data, price = form.price.data, seller_id = current_user.id)
-        product.image = Product.generate_image(product.category)
+        product.image = product.generate_image(product.category)
+
+        if product.image is None:
+            flash('Error during the image generation, try again later!')
+            return
 
         db.session.add(product)
 
