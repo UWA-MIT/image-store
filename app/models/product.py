@@ -4,6 +4,10 @@ import sqlalchemy.orm as so
 from app import db
 from openai import OpenAI
 import requests
+import uuid
+import time
+import os
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Product(db.Model):
@@ -35,8 +39,9 @@ class Product(db.Model):
         try:
             url = response.data[0].url
             if self.check_url_exists(url):
-                return url
-        except Exception:
+                return self.download_and_save_image(url)
+        except Exception as e:
+            print(e)
             pass
 
         return None
@@ -52,3 +57,16 @@ class Product(db.Model):
             return False
         except requests.RequestException as e:
             return False
+
+    def download_and_save_image(self, url):
+        try:
+            response = requests.get(url)
+            if response.status_code == 200:
+                filename = f"{int(time.time())}_{uuid.uuid4().hex}.png"
+                path = os.path.join(basedir, '../static/images/nft/' + filename)
+                with open(path, 'wb') as f:
+                    f.write(response.content)
+                return filename
+        except Exception as e:
+            print(e)
+            return None
