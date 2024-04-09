@@ -212,6 +212,25 @@ class Test(unittest.TestCase):
         actual_text = element.text
         assert expected_text == actual_text, f"Expected text '{expected_text}' did not match actual text '{actual_text}'."
 
+    def testMyPurchasesPage(self):
+        user = self.createUser()
+        product1, product2 = self.createProducts(1, 1, True)
+        self.login(user)
+        self.driver.get('http://127.0.0.1:5000/products/my_purchases')
+
+        product = WebDriverWait(self.driver, 20).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, ".product-listing .card.area[data-id='" + str(product1.id) + "']"))
+        )
+        element = product.find_element(By.CSS_SELECTOR, ".card-title")
+        expected_text = product1.name.upper() + ' (' + product1.category.upper() + ')'
+        actual_text = element.text
+        assert expected_text == actual_text, f"Expected name and category '{expected_text}' did not match actual name and category '{actual_text}'."
+
+        element = product.find_element(By.CSS_SELECTOR, ".card-text .price")
+        expected_text = '$' + str(product1.price)
+        actual_text = element.text
+        assert expected_text == actual_text, f"Expected price '{expected_text}' did not match actual price '{actual_text}'."
+
 
     def createUser(self, usernam='Konstantin', email='24090236@student.uwa.edu.au', about_me='I am a student'):
         user = User(username = usernam, email = email, about_me=about_me)
@@ -240,9 +259,9 @@ class Test(unittest.TestCase):
             EC.presence_of_element_located((By.XPATH, element_xpath))
         )
 
-    def createProducts(self, seller_id=1):
-        product1 = Product(name='Lambo', category='Car', price=100.0, is_sold=False, seller_id=seller_id)
-        product2 = Product(name='Small', category='Ant', price=100.0, is_sold=False, seller_id=seller_id)
+    def createProducts(self, seller_id=1, buyer_id=None, is_sold=False):
+        product1 = Product(name='Lambo', category='Car', price=100.0, is_sold=is_sold, seller_id=seller_id, buyer_id=buyer_id)
+        product2 = Product(name='Small', category='Ant', price=100.0, is_sold=is_sold, seller_id=seller_id, buyer_id=buyer_id)
         db.session.add(product1)
         db.session.add(product2)
         db.session.commit()
