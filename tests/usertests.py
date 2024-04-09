@@ -5,6 +5,7 @@ sys.path.append('../')
 from config import TestConfig
 from app import create_app, db
 from app.models.user import User
+from app.models.product import Product
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -174,9 +175,46 @@ class Test(unittest.TestCase):
         print(path)
         os.remove(path)
 
+    def testBuyImage(self):
+        user = self.createUser()
+        user2 = self.createUser('Ivan', 'ivan@mail.ru', 'student')
+        product1, product2 = self.createProducts(2)
+        self.login(user)
+        self.driver.get('http://127.0.0.1:5000/products/buy')
 
-    def createUser(self):
-        user = User(username = 'Konstantin', email = '24090236@student.uwa.edu.au', about_me='lal')
+        product = WebDriverWait(self.driver, 20).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, ".product-listing .card.area[data-id='" + str(product1.id) + "']"))
+        )
+        element = product.find_element(By.CSS_SELECTOR, ".card-title")
+        expected_text = product1.name.upper() + ' (' + product1.category.upper() + ')'
+        actual_text = element.text
+        assert expected_text == actual_text, f"Expected name and category '{expected_text}' did not match actual name and category '{actual_text}'."
+
+        element = product.find_element(By.CSS_SELECTOR, ".card-text .price")
+        expected_text = '$' + str(product1.price)
+        actual_text = element.text
+        assert expected_text == actual_text, f"Expected price '{expected_text}' did not match actual price '{actual_text}'."
+
+        buy = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "button.pretty-btn[data-id='" +  str(product2.id) + "']"))
+        )
+        buy.click()
+
+        confirm = WebDriverWait(self.driver, 20).until(
+            EC.element_to_be_clickable((By.XPATH, "//button[@onclick=\"buyImage('" + str(product2.id) + "')\"]"))
+        )
+        confirm.click()
+
+        element = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, ".alert.alert-info"))
+        )
+        expected_text = "Congratulations, your product purchase has been completed successfully!"
+        actual_text = element.text
+        assert expected_text == actual_text, f"Expected text '{expected_text}' did not match actual text '{actual_text}'."
+
+
+    def createUser(self, usernam='Konstantin', email='24090236@student.uwa.edu.au', about_me='I am a student'):
+        user = User(username = usernam, email = email, about_me=about_me)
         user.set_password('test123')
         db.session.add(user)
         db.session.commit()
@@ -201,3 +239,18 @@ class Test(unittest.TestCase):
         WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.XPATH, element_xpath))
         )
+
+    def createProducts(self, seller_id=1):
+        product1 = Product(name='Lambo', category='Car', price=100.0, is_sold=False, seller_id=seller_id)
+        product2 = Product(name='Small', category='Ant', price=100.0, is_sold=False, seller_id=seller_id)
+        db.session.add(product1)
+        db.session.add(product2)
+        db.session.commit()
+        return db.session.get(Product, 1), db.session.get(Product, 2)
+
+    def refreshProducts(self):
+        product1 = db.session.get(Product, 1)
+        product2 = db.session.get(Product, 2)
+        db.session.refresh(product1)
+        db.session.refresh(product2)
+        return product1, product2
