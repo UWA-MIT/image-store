@@ -1,5 +1,5 @@
             <div data-id="{{ product.id }}" class="card area">
-              <img alt="{{ product.name }}" class="card-img-top" src="{{ product.image }}" />
+              <img alt="{{ product.name }}" class="card-img-top" src="{{ url_for('static', filename='images/nft/' ~ product.image) }}" />
               <div class="card-body">
                   <h6 class="card-title">{{ product.name | truncate(10)}} <span class="category">({{ product.category }})</span></h6>
                 <p class="card-text ">
@@ -8,11 +8,11 @@
                 </p>
               </div>
               <div class="card-footer">
-                <div class="row align-items-center g-0">
+                <div class="row align-items-center g-2">
                   <div class="col-auto">
                     <img src="{{ product.seller.avatar(24) }}" class="rounded-circle avatar-xs" alt="avatar">
                   </div>
-                  <div class="col ms-2">
+                  <div class="col-auto">
                     <span>{{ product.seller.username }}</span>
                   </div>
                   <div class="col-auto">
