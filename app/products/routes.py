@@ -37,14 +37,13 @@ def generate_product():
 
     form = GenerateProductForm()
     if form.validate_on_submit():
-        product = Product(name=form.name.data, description=form.description.data, price = form.price.data, seller_id = current_user.id)
-        product.image = Product.generate_image(product.name)
-        # logger.info("Image OpenAI: " . product.image)
+        product = Product(name=form.name.data, category=form.category.data, price = form.price.data, seller_id = current_user.id)
+        product.image = Product.generate_image(product.category)
 
         db.session.add(product)
 
         user = db.session.get(User, current_user.id)
-        user.reward_points = user.reward_points + int(current_app.config['REWARD_POINTS_FOR_GENERATE_PRODUCT'])
+        user.money = user.money + int(current_app.config['REWARD_MONEY_FOR_GENERATE_PRODUCT'])
 
         db.session.commit()
 
@@ -77,15 +76,15 @@ def buy():
 def buy_product(product_id):
     product = db.first_or_404(sa.select(Product).where(Product.id == product_id, Product.is_sold == False))
 
-    if (int(round(product.price)) > current_user.reward_points):
-        return jsonify({"success": False, "message": "Sorry, you do not have enough reward points to buy this product"}), 200
+    if (int(round(product.price)) > current_user.money):
+        return jsonify({"success": False, "message": "Sorry, you do not have enough money to buy this product"}), 200
 
     product.is_sold = True
     product.buyer_id = current_user.id
     product.sold_at = datetime.utcnow()
 
     user = db.session.get(User, current_user.id)
-    user.reward_points = user.reward_points - int(round(product.price))
+    user.money = user.money - int(round(product.price))
     db.session.commit()
     return jsonify({"success": True, "message": "Congratulations, your product purchase has been completed successfully!"}), 200
 

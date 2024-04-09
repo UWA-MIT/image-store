@@ -18,7 +18,7 @@ class User(UserMixin, db.Model):
     password_hash = sa.Column(sa.String(256))
     status = sa.Column(sa.String(20), index=True)
     about_me = sa.Column(sa.String(140))
-    reward_points = sa.Column(sa.Integer(), default=100)
+    money = sa.Column(sa.Integer(), default=100)
     last_seen = sa.Column(sa.DateTime, default=lambda: datetime.now(timezone.utc))
 
     def __repr__(self):

@@ -144,7 +144,7 @@ button.pretty-btn, input[type=submit].pretty-btn {
 .prettygrey:after, .prettygrey:before {
     background-color: #3c3556;
 }
-input[type=text], input[type=email], input[type=password], input[type=number], input[type=search], textarea {
+input[type=text], input[type=email], input[type=password], input[type=number], input[type=search], textarea, select {
     position: relative;
     width: 100%;
     max-width: 100%!important;
@@ -170,7 +170,7 @@ textarea {
     box-shadow: 0 10px 27px 0 rgba(14,8,18,.5);
     margin: 40px 15px 35px !important;
 }
-.area input, textarea {
+.area input, textarea, select {
     background-color: #1b0f23;
     color: #fff;
 }
@@ -295,6 +295,9 @@ textarea {
 .modal, .modal-open {
     padding-right: 0 !important;
 }
-#nameImage, #priceImage {
+#nameImage, #priceImage, .money, .price {
     color: #00c900;
+}
+.category {
+    color: bisque;
 }
