@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
     {% if title %}
         <title>{{ title }} - BuySell</title>
     {% else %}
@@ -29,9 +29,9 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        
+
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          
+
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
               <a class="nav-link pretty-link" aria-current="page" href="{{ url_for('main.index') }}"><span>Home</span></a>
@@ -43,12 +43,12 @@
               <a class="nav-link pretty-link" aria-current="page" href="{{ url_for('products.sell') }}"><span>Sell</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link pretty-link" aria-current="page" href="{{ url_for('products.generate_product') }}"><span>Generate</span></a>
+              <a class="nav-link pretty-link" aria-current="page" href="{{ url_for('products.my_purchases') }}"><span>My purchases</span></a>
             </li>
           </ul>
 
           <ul class="navbar-nav mb-2 mb-lg-0">
-          	
+
             <li class="nav-item">
               <form class="d-flex" action="#" role="search" >
     		        <input class="form-control-sm me-2" type="search" name="q" placeholder="Search" aria-label="Search">
@@ -69,11 +69,10 @@
                 </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img src="{{ current_user.avatar(24) }}" class="rounded-circle avatar-xs" alt="avatar"> 
+                  <img src="{{ current_user.avatar(24) }}" class="rounded-circle avatar-xs" alt="avatar">
                   {{ current_user.username }}
               </a>
               <ul class="dropdown-menu ps-3 pe-3">
-                <li class="pb-2"><a href="{{ url_for('products.my_purchases') }}">My purchases</a> </li>
                 <li class="pb-2"><a href="{{ url_for('users.user', username=current_user.username) }}">View Profile</a></li>
                 <li class="pb-2"><a href="{{ url_for('users.edit_profile') }}">Edit Profile</a></li>
                 <li class="pb-2"><a href="{{ url_for('auth.change_password') }}">Change password</a> </li>
@@ -89,8 +88,11 @@
       </div>
     </nav>
   </header>
-   
-    
+  <div id="overlay" style="display:none;">
+      <div class="loader me-3"></div>
+     <div class="loading-message">Loading...</div>
+  </div>
+
 
     <div class="container mt-3 base">
       {% with messages = get_flashed_messages() %}

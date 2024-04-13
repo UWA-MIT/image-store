@@ -145,11 +145,16 @@ class Test(unittest.TestCase):
     def testGenerateImage(self):
         user = self.createUser()
         self.login(user)
-        self.driver.get('http://127.0.0.1:5000/products/generate_product')
-        name = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located((By.ID, "name"))
+        self.driver.get('http://127.0.0.1:5000/products/sell')
+        button = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, ".generate-image"))
+        )
+        button.click()
+        form = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located((By.ID, "generateForm"))
         )
         dropdown = Select(self.driver.find_element(By.ID, "category"))
+        name = self.driver.find_element(By.ID, "name")
         price = self.driver.find_element(By.ID, "price")
         submit = self.driver.find_element(By.ID, "submit")
         name.send_keys('Lambo')
@@ -158,7 +163,7 @@ class Test(unittest.TestCase):
         submit.click()
 
         product = WebDriverWait(self.driver, 20).until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, ".product-listing .card.area"))
+            EC.visibility_of_element_located((By.CSS_SELECTOR, ".product-listing .card.area.new"))
         )
         element = product.find_element(By.CSS_SELECTOR, ".card-title")
         expected_text = 'LAMBO (CAR)'
@@ -166,7 +171,7 @@ class Test(unittest.TestCase):
         assert expected_text == actual_text, f"Expected name and category '{expected_text}' did not match actual name and category '{actual_text}'."
 
         element = product.find_element(By.CSS_SELECTOR, ".card-text .price")
-        expected_text = '$100.0'
+        expected_text = '$100'
         actual_text = element.text
         assert expected_text == actual_text, f"Expected price '{expected_text}' did not match actual price '{actual_text}'."
 
