@@ -32,6 +32,16 @@ $(document).ready(function () {
             }
         });
     });
+  $('.counter span').each(function() {
+    const $span = $(this);
+    const count = $span.data('count');
+    $({ counter: 0 }).animate({ counter: count }, {
+      duration: 1000,
+      step: function() {
+        $span.css('--num', Math.ceil(this.counter));
+      }
+    });
+  });
 });
 
 function transferDataToModal(elem) {
@@ -45,7 +55,7 @@ function transferDataToModal(elem) {
 }
 
 function buyImage(id) {
-    var url = id + '/buy';
+    const url = id + '/buy';
     $.ajax({
         url: url,
         type: 'GET',

@@ -63,6 +63,9 @@ class User(UserMixin, db.Model):
 
         return 0
 
+def user_count():
+    return User.query.count()
+
 
 
 

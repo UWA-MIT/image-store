@@ -1,12 +1,12 @@
-
-from flask import render_template, flash, redirect, url_for, request
-from urllib.parse import urlsplit
+from flask import render_template
 from datetime import datetime, timezone
-from flask_login import current_user, login_required
+from flask_login import current_user
 
-import sqlalchemy as sa
 from app import db
 from app.main import bp
+from app.models.user import user_count
+from app.models.product import image_count
+
 
 @bp.before_request
 def before_request():
@@ -16,9 +16,8 @@ def before_request():
 
 @bp.route('/')
 @bp.route('/index')
-@login_required
 def index():
-    return render_template('main/index.html')
+    return render_template('main/index.html', user_count=user_count(), image_count=image_count())
 
 
 

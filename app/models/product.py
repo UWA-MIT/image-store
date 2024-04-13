@@ -71,3 +71,6 @@ class Product(db.Model):
         except Exception as e:
             print(e)
             return None
+
+def image_count():
+    return Product.query.count()
