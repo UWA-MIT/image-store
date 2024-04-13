@@ -9,7 +9,6 @@ from app.products import bp
 
 
 from flask_login import current_user, login_required
-from app.products.forms import GenerateProductForm
 
 
 @bp.route('/sell')
@@ -31,31 +30,47 @@ def sell():
 
 
 
-@bp.route('/generate_product', methods=['GET', 'POST'])
+@bp.route('/generate_product', methods=['POST'])
 @login_required
 def generate_product():
 
-    form = GenerateProductForm()
-    if form.validate_on_submit():
-        product = Product(name=form.name.data, category=form.category.data, price = form.price.data, seller_id = current_user.id)
-        product.image = product.generate_image(product.category)
+    data = request.get_json()
 
-        if product.image is None:
-            flash('Error during the image generation, try again later!')
-            return
+    if not data:
+        return jsonify({'success': False, 'message': 'No data received'}), 400
 
-        db.session.add(product)
+    name = data.get('name')
+    category = data.get('category')
+    price = data.get('price')
 
-        user = db.session.get(User, current_user.id)
-        user.money = user.money + int(current_app.config['REWARD_MONEY_FOR_GENERATE_PRODUCT'])
+    product = Product(name=name, category=category, price=price, seller_id=current_user.id)
+    product.image = product.generate_image(product.category)
 
-        db.session.commit()
+    if product.image is None:
+        flash('Error during the image generation, try again later!')
+        return
 
-        flash('Congratulations, your product has been generated.')
-        return redirect(url_for('products.sell'))
+    db.session.add(product)
 
-    return render_template('products/generate_product.html', title='Generate Product',
-                           form=form)
+    user = db.session.get(User, current_user.id)
+    user.money = user.money + int(current_app.config['REWARD_MONEY_FOR_GENERATE_PRODUCT'])
+
+    db.session.commit()
+
+    return jsonify({
+        "success": True,
+        "message": "Congratulations, your product has been generated!",
+        "data": {
+            "id": product.id,
+            "name": product.name,
+            "category": product.category,
+            "price": product.price,
+            "image": product.image,
+            "timestamp": product.timestamp.strftime('%Y-%m-%d'),
+            "username": user.username,
+            "avatar": user.avatar(24)
+        }
+    }), 201
 
 
 @bp.route('/buy')
