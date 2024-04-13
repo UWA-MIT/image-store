@@ -44,14 +44,8 @@ class Test(unittest.TestCase):
         self.login(user)
         logout = self.driver.find_element(By.ID, "logout")
         logout.click()
-        username = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located((By.ID, "username"))
-        )
-        password = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located((By.ID, "password"))
-        )
-        assert username.is_displayed(), "The username element is not visible."
-        assert password.is_displayed(), "The password element is not visible."
+        headerUsername = self.driver.find_elements(By.ID, "headerUsername")
+        assert len(headerUsername) == 0, "The element with ID 'headerUsername' exists."
 
 
     def testRegistration(self):
@@ -278,7 +272,7 @@ class Test(unittest.TestCase):
         username.send_keys(user.username)
         password.send_keys('test123')
         submit.click()
-        element_xpath = f"//*[contains(text(), 'Hello, {user.username}!')]"
+        element_xpath = f"//*[@id='headerUsername' and contains(text(), '{user.username}')]"
         WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.XPATH, element_xpath))
         )
