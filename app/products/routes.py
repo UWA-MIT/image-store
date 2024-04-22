@@ -95,6 +95,9 @@ def buy():
 def buy_product(product_id):
     product = db.first_or_404(sa.select(Product).where(Product.id == product_id, Product.is_sold == False))
 
+    if (product.seller_id == current_user.id):
+        return jsonify({"success": False, "message": "Sorry, you cannot purchase an item that you've created."}), 422
+
     if (int(round(product.price)) > current_user.money):
         return jsonify({"success": False, "message": "Sorry, you do not have enough money to buy this product"}), 200
 
