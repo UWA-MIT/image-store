@@ -35,13 +35,16 @@ def sell():
 def generate_product():
 
     data = request.get_json()
-
+    
     if not data:
         return jsonify({'success': False, 'message': 'No data received'}), 400
 
     name = data.get('name')
     category = data.get('category')
     price = data.get('price')
+
+    if int(price) > 10:
+        return jsonify({'success': False, 'message': 'Price cannot exceed $10'}), 400
 
     product = Product(name=name, category=category, price=price, seller_id=current_user.id)
     product.image = product.generate_image(product.category)
