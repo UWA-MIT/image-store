@@ -52,11 +52,12 @@
           <ul class="navbar-nav mb-2 mb-lg-0">
 
             <li class="nav-item">
-              <form class="d-flex" action="#" role="search" >
+              <form class="d-flex" action="{{ searchPath if searchPath else url_for('products.buy') }}" method="GET" role="search" >
     		        <input class="form-control-sm me-2" type="search" name="q" placeholder="Search" aria-label="Search">
     		        <button class="pretty-btn nav-link btn-sm prettygrey" type="submit">Search</button>
     		      </form>
             </li>
+
             {% if current_user.is_anonymous %}
                 <li class="nav-item">
                     <a class="nav-link pretty-link" aria-current="page" href="{{ url_for('auth.login') }}"><span>Login</span></a>

@@ -9,6 +9,7 @@ from app.products import bp
 
 
 from flask_login import current_user, login_required
+from sqlalchemy.sql.operators import like_op
 
 
 @bp.route('/sell')
@@ -78,8 +79,14 @@ def generate_product():
 def buy():
 
     page = request.args.get('page', 1, type=int)
+    searchString = request.args.get('q')
 
-    query = sa.select(Product, User).join(User, User.id == Product.seller_id).where(Product.is_sold == False).order_by(Product.timestamp.desc())
+    if (searchString):
+        query = sa.select(Product, User).join(User, User.id == Product.seller_id).where(Product.is_sold == False, like_op(Product.name, '%' + searchString + '%')).order_by(Product.timestamp.desc())
+        q = searchString
+        title = "Search: " + q
+    else:
+        query = sa.select(Product, User).join(User, User.id == Product.seller_id).where(Product.is_sold == False).order_by(Product.timestamp.desc())
 
     products = db.paginate(query, page=page, per_page=current_app.config['POSTS_PER_PAGE'], error_out=False)
 
@@ -111,8 +118,14 @@ def buy_product(product_id):
 @login_required
 def my_purchases():
     page = request.args.get('page', 1, type=int)
+    searchString = request.args.get('q')
 
-    query = sa.select(Product, User).join(User, User.id == Product.seller_id).where(Product.is_sold == True, Product.buyer_id == current_user.id).order_by(Product.timestamp.desc())
+    if (searchString):
+        query = sa.select(Product, User).join(User, User.id == Product.seller_id).where(Product.is_sold == True, Product.buyer_id == current_user.id, like_op(Product.name, '%' + searchString + '%')).order_by(Product.timestamp.desc())
+        q = searchString
+        title = "Search: " + q
+    else:
+        query = sa.select(Product, User).join(User, User.id == Product.seller_id).where(Product.is_sold == True, Product.buyer_id == current_user.id).order_by(Product.timestamp.desc())
 
     products = db.paginate(query, page=page, per_page=current_app.config['POSTS_PER_PAGE'], error_out=False)
 
@@ -120,6 +133,6 @@ def my_purchases():
         if products.has_next else None
     prev_url = url_for('products.my_purchases', page=products.prev_num) \
         if products.has_prev else None
-    return render_template('products/my_purchases.html', title='My purchases',
+    return render_template('products/my_purchases.html', title='My purchases', searchPath = url_for('products.my_purchases'), 
                            products=products.items, next_url=next_url,
                            prev_url=prev_url)
