@@ -111,6 +111,6 @@ function alertInfo(message) {
         $('#alert').fadeOut('slow', function() {
             $(this).remove();
         });
-    }, 2000);
+    }, 5000);
 }
 
