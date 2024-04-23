@@ -26,7 +26,12 @@ $(document).ready(function () {
                 renderImage($('.products'), response.data);
             },
             error: function (xhr, status, error) {
-                alertInfo(error);
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    alertInfo(xhr.responseJSON.message);
+                } else {
+                    alertInfo(error);
+                }
+            
                 generateForm.modal('hide');
                 overlay.hide();
             }
@@ -67,7 +72,11 @@ function buyImage(id) {
             $('#buyModal').modal('hide');
         },
         error: function (xhr, status, error) {
-            alertInfo(error);
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                alertInfo(xhr.responseJSON.message);
+            } else {
+                alertInfo(error);
+            }
             $('#buyModal').modal('hide');
         }
     });

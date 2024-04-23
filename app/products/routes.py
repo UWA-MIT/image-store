@@ -9,6 +9,7 @@ from app.products import bp
 
 
 from flask_login import current_user, login_required
+from sqlalchemy.sql.operators import like_op
 
 
 @bp.route('/sell')
@@ -35,13 +36,16 @@ def sell():
 def generate_product():
 
     data = request.get_json()
-
+    
     if not data:
         return jsonify({'success': False, 'message': 'No data received'}), 400
 
     name = data.get('name')
     category = data.get('category')
     price = data.get('price')
+
+    if int(price) > 10:
+        return jsonify({'success': False, 'message': 'Price cannot exceed $10'}), 400
 
     product = Product(name=name, category=category, price=price, seller_id=current_user.id)
     product.image = product.generate_image(product.category)
@@ -78,8 +82,14 @@ def generate_product():
 def buy():
 
     page = request.args.get('page', 1, type=int)
+    searchString = request.args.get('q')
 
-    query = sa.select(Product, User).join(User, User.id == Product.seller_id).where(Product.is_sold == False).order_by(Product.timestamp.desc())
+    if (searchString):
+        query = sa.select(Product, User).join(User, User.id == Product.seller_id).where(Product.is_sold == False, like_op(Product.name, '%' + searchString + '%')).order_by(Product.timestamp.desc())
+        q = searchString
+        title = "Search: " + q
+    else:
+        query = sa.select(Product, User).join(User, User.id == Product.seller_id).where(Product.is_sold == False).order_by(Product.timestamp.desc())
 
     products = db.paginate(query, page=page, per_page=current_app.config['POSTS_PER_PAGE'], error_out=False)
 
@@ -94,6 +104,9 @@ def buy():
 @login_required
 def buy_product(product_id):
     product = db.first_or_404(sa.select(Product).where(Product.id == product_id, Product.is_sold == False))
+
+    if (product.seller_id == current_user.id):
+        return jsonify({"success": False, "message": "Sorry, you cannot purchase an item that you've created."}), 422
 
     if (int(round(product.price)) > current_user.money):
         return jsonify({"success": False, "message": "Sorry, you do not have enough money to buy this product"}), 200
@@ -111,8 +124,14 @@ def buy_product(product_id):
 @login_required
 def my_purchases():
     page = request.args.get('page', 1, type=int)
+    searchString = request.args.get('q')
 
-    query = sa.select(Product, User).join(User, User.id == Product.seller_id).where(Product.is_sold == True, Product.buyer_id == current_user.id).order_by(Product.timestamp.desc())
+    if (searchString):
+        query = sa.select(Product, User).join(User, User.id == Product.seller_id).where(Product.is_sold == True, Product.buyer_id == current_user.id, like_op(Product.name, '%' + searchString + '%')).order_by(Product.timestamp.desc())
+        q = searchString
+        title = "Search: " + q
+    else:
+        query = sa.select(Product, User).join(User, User.id == Product.seller_id).where(Product.is_sold == True, Product.buyer_id == current_user.id).order_by(Product.timestamp.desc())
 
     products = db.paginate(query, page=page, per_page=current_app.config['POSTS_PER_PAGE'], error_out=False)
 
@@ -120,6 +139,6 @@ def my_purchases():
         if products.has_next else None
     prev_url = url_for('products.my_purchases', page=products.prev_num) \
         if products.has_prev else None
-    return render_template('products/my_purchases.html', title='My purchases',
+    return render_template('products/my_purchases.html', title='My purchases', searchPath = url_for('products.my_purchases'), 
                            products=products.items, next_url=next_url,
                            prev_url=prev_url)
