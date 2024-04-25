@@ -1,5 +1,6 @@
-from flask import render_template, flash, redirect, url_for, request, current_app, jsonify
+from flask import render_template, flash, url_for, request, current_app, jsonify
 from datetime import datetime
+from sqlalchemy import or_, func
 import sqlalchemy as sa
 
 from app import db
@@ -16,16 +17,16 @@ from sqlalchemy.sql.operators import like_op
 @login_required
 def sell():
     page = request.args.get('page', 1, type=int)
+    search_string = request.args.get('q')
 
-    query = sa.select(Product, User).join(User, User.id == Product.seller_id).where(Product.is_sold == False, Product.seller_id == current_user.id).order_by(Product.timestamp.desc())
-
-    products = db.paginate(query, page=page, per_page=current_app.config['POSTS_PER_PAGE'], error_out=False)
+    query = sa.select(Product, User).join(User, User.id == Product.seller_id).where(Product.is_sold == False, Product.seller_id == current_user.id)
+    products = apply_search_and_paginate(query, search_string, page)
 
     next_url = url_for('products.sell', page=products.next_num) \
         if products.has_next else None
     prev_url = url_for('products.sell', page=products.prev_num) \
         if products.has_prev else None
-    return render_template('products/sell.html', title='Sell items',
+    return render_template('products/sell.html', title='Sell items', searchPath=url_for('products.sell'),
                            products=products.items, next_url=next_url,
                            prev_url=prev_url)
 
@@ -82,16 +83,10 @@ def generate_product():
 def buy():
 
     page = request.args.get('page', 1, type=int)
-    searchString = request.args.get('q')
+    search_string = request.args.get('q')
 
-    if (searchString):
-        query = sa.select(Product, User).join(User, User.id == Product.seller_id).where(Product.is_sold == False, like_op(Product.name, '%' + searchString + '%')).order_by(Product.timestamp.desc())
-        q = searchString
-        title = "Search: " + q
-    else:
-        query = sa.select(Product, User).join(User, User.id == Product.seller_id).where(Product.is_sold == False).order_by(Product.timestamp.desc())
-
-    products = db.paginate(query, page=page, per_page=current_app.config['POSTS_PER_PAGE'], error_out=False)
+    query = sa.select(Product, User).join(User, User.id == Product.seller_id).where(Product.is_sold == False)
+    products = apply_search_and_paginate(query, search_string, page)
 
     next_url = url_for('products.buy', page=products.next_num) \
         if products.has_next else None
@@ -124,16 +119,10 @@ def buy_product(product_id):
 @login_required
 def my_purchases():
     page = request.args.get('page', 1, type=int)
-    searchString = request.args.get('q')
+    search_string = request.args.get('q')
 
-    if (searchString):
-        query = sa.select(Product, User).join(User, User.id == Product.seller_id).where(Product.is_sold == True, Product.buyer_id == current_user.id, like_op(Product.name, '%' + searchString + '%')).order_by(Product.timestamp.desc())
-        q = searchString
-        title = "Search: " + q
-    else:
-        query = sa.select(Product, User).join(User, User.id == Product.seller_id).where(Product.is_sold == True, Product.buyer_id == current_user.id).order_by(Product.timestamp.desc())
-
-    products = db.paginate(query, page=page, per_page=current_app.config['POSTS_PER_PAGE'], error_out=False)
+    query = sa.select(Product, User).join(User, User.id == Product.seller_id).where(Product.is_sold == True, Product.buyer_id == current_user.id)
+    products = apply_search_and_paginate(query, search_string, page)
 
     next_url = url_for('products.my_purchases', page=products.next_num) \
         if products.has_next else None
@@ -142,3 +131,14 @@ def my_purchases():
     return render_template('products/my_purchases.html', title='My purchases', searchPath = url_for('products.my_purchases'), 
                            products=products.items, next_url=next_url,
                            prev_url=prev_url)
+
+def apply_search_and_paginate(query, search_string, page):
+    if search_string:
+        query = query.where(
+            or_(
+                func.lower(Product.name).like('%' + search_string.lower() + '%'),
+                func.lower(Product.category).like('%' + search_string.lower() + '%')
+            )
+        )
+    query = query.order_by(Product.timestamp.desc())
+    return db.paginate(query, page=page, per_page=current_app.config['POSTS_PER_PAGE'], error_out=False)
