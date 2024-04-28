@@ -40,12 +40,54 @@
           </div>
           <div class="card-body-none p-4-none text-black" style="margin-top: 1.5rem">
             <div class="mb-5">
+
               <p class="lead fw-normal mb-1 text-white">About</p>
-              <div class="p-4 profile-bg3">
+              <div class="p-4 profile-bg2">
                 <p class="font-italic mb-1 about-me">{% if user.about_me %}Bio: {{ user.about_me }} {% endif %}</p>
                 <p class="font-italic mb-1">{% if user.email %} Email: {{ user.email }} {% endif %}</p>
                 <p class="font-italic mb-0">{% if user.last_seen %} Last seen on: {{ user.last_seen }} {% endif %}</p>
               </div>
+
+              <p class="lead fw-normal mb-1 text-white mt-1">Recent rewards (latest 20)</p>
+              <div class="p-4 profile-bg3">
+
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">Date</th>
+                      <th scope="col">Reason</th>
+                      <th scope="col">Type</th>
+                      <th scope="col">Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if recent_rewards: %}
+
+                        {% for reward in recent_rewards: %}
+                        <tr>
+                          <td>{{ reward.timestamp.strftime('%d-%m-%Y') }}</td>
+                          <td>{{ reward.reason }}</td>
+                          <td>{{ reward.reward_type }}</td>
+                          <td>
+                              {% if reward.reward_type == 'Debit' %}
+                              - 
+                              {% endif %}{{ reward.amount }}
+                          </td>
+                        </tr>
+                        {% endfor %}
+
+                    {% else: %}
+                      <tr>
+                          <td colspan="4">No rewards found in the system</td>
+                        </tr>
+                    {% endif %}
+
+                  </tbody>
+                </table>
+
+              </div>
+
+
             </div>
           </div>
         </div>
