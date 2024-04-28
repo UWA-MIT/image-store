@@ -5,6 +5,7 @@ from flask import current_app
 from app import db
 from app.models.product import Product
 
+from sqlalchemy import func
 from sqlalchemy.exc import SQLAlchemyError
 
 # This is a basic reward model which will keep record of all the rewards
@@ -20,6 +21,10 @@ class Reward( db.Model):
 
     def __repr__(self):
         return '<Reward {} {}>'.format(self.id, self.reason)
+
+    def total_credit_rewards():
+        total_credit_rewards = Reward.query.filter_by(reward_type='Credit').with_entities(func.sum(Reward.amount)).scalar() or 0
+        return total_credit_rewards
 
     def applyReward(reason:str, amount:int, user_id:int, reward_type:str = "Credit"):
         # This is a generic method to apply reward to a user account. 
