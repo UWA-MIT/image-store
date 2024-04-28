@@ -5,6 +5,7 @@ import sqlalchemy as sa
 from app import db
 from app.auth import bp
 from app.models.user import User
+from app.models.reward import Reward
 
 from flask_login import current_user, login_user, logout_user, login_required
 from app.auth.forms import LoginForm, RegistrationForm, ChangePasswordForm, \
@@ -48,6 +49,10 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
+
+        # Add reward for user registration.
+        Reward.addRewardForRegistration(user.id);
+
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('auth.login'))
     return render_template('auth/register.html', title='Register', form=form)

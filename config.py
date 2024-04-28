@@ -20,6 +20,11 @@ class Config:
     POSTS_PER_PAGE=10
 
     REWARD_MONEY_FOR_GENERATE_PRODUCT=5
+    REWARD_MONEY_FOR_REGISTRATION=100
+
+
+
+
 
 class TestConfig(Config):
     TESTING = True
