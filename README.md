@@ -62,6 +62,11 @@ flask run  --debug
 
 Access the app at: http://127.0.0.1:5000
 
+After installing any new python package. Please include it to requirements.txt file with following command:
+
+```
+pip freeze > requirements.txt
+```
 
 ### Run in docker
 ```
@@ -100,6 +105,14 @@ python -m unittest usertests.py
 Run a test:
 ```
 python -m unittest usertests.Test.testEditProfile
+```
+
+Run tests on Mac:
+
+The chromedriver needs to be installed separately for macos. Use following brew command to install it.
+
+```
+brew install cask chromedriver
 ```
 
 ## References:
