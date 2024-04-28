@@ -114,6 +114,12 @@ def buy_product(product_id):
     # Deduct reward for generating image, also udpate user money balance
     Reward.deductRewardForPurchase(current_user.id, product.id, int(round(product.price)))
 
+    # Add reward for x number purchase from same seller
+    Reward.addRewardForPurchaseFromSameUserIfApplicable(current_user.id, product.id, product.seller_id)
+
+    # Add reward for x number purchase from same category
+    Reward.addRewardForPurchaseFromSameUserIfApplicable(current_user.id, product.id, product.category)
+
     return jsonify({"success": True, "message": "Congratulations, your product purchase has been completed successfully!"}), 200
 
 @bp.route('/my_purchases')
