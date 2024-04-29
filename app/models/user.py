@@ -9,6 +9,7 @@ import sqlalchemy as sa
 from flask import current_app
 from app import db
 from app import login
+from app.models import product
 
 class User(UserMixin, db.Model):
     id = sa.Column(sa.Integer, primary_key=True)
@@ -56,12 +57,18 @@ class User(UserMixin, db.Model):
     
 
     def get_image_count(self, user_id):
-        
-        return 0
+        logged_in_user = User.query.get(user_id)
+
+        # Get the count of products associated with the logged-in user
+        image_count = product.Product.query.filter_by(seller_id=logged_in_user.id).count()
+
+        return image_count
 
     def get_purchase_count(self, user_id):
+        logged_in_user = User.query.get(user_id)
+        purchase_count = product.Product.query.filter_by(buyer_id=logged_in_user.id).count()
 
-        return 0
+        return purchase_count
 
 def user_count():
     return User.query.count()
