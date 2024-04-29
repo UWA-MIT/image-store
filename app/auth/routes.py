@@ -1,10 +1,12 @@
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, current_app
 from urllib.parse import urlsplit
 import sqlalchemy as sa
+from datetime import timedelta
 
 from app import db
 from app.auth import bp
 from app.models.user import User
+from app.models.reward import Reward
 
 from flask_login import current_user, login_user, logout_user, login_required
 from app.auth.forms import LoginForm, RegistrationForm, ChangePasswordForm, \
@@ -18,11 +20,12 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit():
+
         user = db.session.scalar(sa.select(User).where(User.username == form.username.data))
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('auth.login'))
-        login_user(user, remember=form.remember_me.data)
+        login_user(user, remember=form.remember_me.data, duration=timedelta(days=current_app.config['REMEMBER_ME_DAYS']))
 
         next_page = request.args.get('next')
         if not next_page or urlsplit(next_page).netloc != '':
@@ -48,6 +51,10 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
+
+        # Add reward for user registration.
+        Reward.addRewardForRegistration(user.id);
+
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('auth.login'))
     return render_template('auth/register.html', title='Register', form=form)
