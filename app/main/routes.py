@@ -6,6 +6,7 @@ from app import db
 from app.main import bp
 from app.models.user import user_count
 from app.models.product import image_count
+from app.models.reward import Reward
 
 
 @bp.before_request
@@ -17,7 +18,7 @@ def before_request():
 @bp.route('/')
 @bp.route('/index')
 def index():
-    return render_template('main/index.html', user_count=user_count(), image_count=image_count())
+    return render_template('main/index.html', user_count=user_count(), image_count=image_count(), total_credit_rewards = Reward.total_credit_rewards())
 
 
 

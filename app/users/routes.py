@@ -6,6 +6,7 @@ import sqlalchemy as sa
 # from app import app
 from app import db
 from app.models.user import User
+from app.models.reward import Reward
 from app.users import bp
 
 from flask_login import current_user, login_user, logout_user, login_required
@@ -32,8 +33,10 @@ def user(username):
     if user.id != current_user.id:
         flash('You are not allowed to access that location.')
         return redirect(url_for('main.index'))
+
+    recent_rewards = Reward.query.filter_by(user_id=user.id).order_by(Reward.timestamp.desc()).limit(20).all()
     
-    return render_template('users/user.html', user = user, image_count = image_count, purchase_count = purchase_count)
+    return render_template('users/user.html', user = user, image_count = image_count, purchase_count = purchase_count, recent_rewards = recent_rewards)
 
 @bp.route('/edit_profile', methods=['GET', 'POST'])
 @login_required

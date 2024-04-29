@@ -6,6 +6,7 @@ import sqlalchemy as sa
 from app import db
 from app.models.product import Product
 from app.models.user import User
+from app.models.reward import Reward
 from app.products import bp
 
 
@@ -56,11 +57,10 @@ def generate_product():
         return
 
     db.session.add(product)
-
-    user = db.session.get(User, current_user.id)
-    user.money = user.money + int(current_app.config['REWARD_MONEY_FOR_GENERATE_PRODUCT'])
-
     db.session.commit()
+
+    # Deduct reward for generating image, also udpate user money balance
+    Reward.deductRewardForImageGeneration(current_user.id, product.id)
 
     return jsonify({
         "success": True,
@@ -109,10 +109,17 @@ def buy_product(product_id):
     product.is_sold = True
     product.buyer_id = current_user.id
     product.sold_at = datetime.utcnow()
-
-    user = db.session.get(User, current_user.id)
-    user.money = user.money - int(round(product.price))
     db.session.commit()
+
+    # Deduct reward for generating image, also udpate user money balance
+    Reward.deductRewardForPurchase(current_user.id, product.id, int(round(product.price)))
+
+    # Add reward for x number purchase from same seller
+    Reward.addRewardForPurchaseFromSameUserIfApplicable(current_user.id, product.id, product.seller_id)
+
+    # Add reward for x number purchase from same category
+    Reward.addRewardForPurchaseFromSameUserIfApplicable(current_user.id, product.id, product.category)
+
     return jsonify({"success": True, "message": "Congratulations, your product purchase has been completed successfully!"}), 200
 
 @bp.route('/my_purchases')
