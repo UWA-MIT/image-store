@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-load_dotenv(os.path.join(basedir, '.env'))
+load_dotenv(os.path.join(basedir, '.flaskenv'))
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or '52e4da2524c9580fd6bcff60fab06189'
@@ -16,6 +16,7 @@ class Config:
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     ADMINS = ['admin@student.uwa.edu.au']
+    OPENAI_API_KEY=os.environ.get('OPENAI_API_KEY')
     
     POSTS_PER_PAGE=10
 
