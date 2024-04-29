@@ -20,6 +20,7 @@ class Config:
     POSTS_PER_PAGE=10
 
     REWARD_MONEY_FOR_GENERATE_PRODUCT=5
+    REMEMBER_ME_DAYS=7
 
 class TestConfig(Config):
     TESTING = True
