@@ -7,10 +7,12 @@ from app.main import bp
 from app.models.user import user_count
 from app.models.product import image_count
 from app.models.reward import Reward
+from app.models.product import Product
 
 
 @bp.before_request
 def before_request():
+    """Update the last_seen attribute of the current user's model before processing each request."""
     if current_user.is_authenticated:
         current_user.last_seen = datetime.now(timezone.utc)
         db.session.commit()
@@ -18,7 +20,14 @@ def before_request():
 @bp.route('/')
 @bp.route('/index')
 def index():
-    return render_template('main/index.html', user_count=user_count(), image_count=image_count(), total_credit_rewards = Reward.total_credit_rewards())
+    """
+    Render the main index page with recent images, user count, image count, and total credit rewards.
+
+    Returns:
+        str: Rendered HTML template with recent images, user count, image count, and total credit rewards.
+    """
+    recent_images = Product.query.filter_by().order_by(Product.timestamp.desc()).limit(12).all()
+    return render_template('main/index.html', user_count=user_count(), image_count=image_count(), recent_images = recent_images, total_credit_rewards = Reward.total_credit_rewards())
 
 
 

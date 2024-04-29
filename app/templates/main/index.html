@@ -27,7 +27,7 @@
             </div>
         </div>
 
-            <div class="container pb-5 pt-5 stats">
+        <div class="container pb-5 pt-5 stats">
             <div class="row g-5 text-center">
                 <div class="col-md-4">
                     <h2><i class="bi bi-person-hearts"></i> Users</h2>
@@ -43,7 +43,25 @@
                 </div>
             </div>
         </div>
-    </main>
 
+        {% if recent_images: %}
+            <div class="latest-images">
+                <h3 class="text-center p-3"><i class="bi bi-cup-hot"></i> Recent generated images</h2>
+
+                <div class="latest-images-carousel">                        
+                    {% for product in recent_images: %}
+                        <div class="slide-item">
+                            <div class="d-inline-block">
+                                <img src="{{ url_for('static', filename='images/nft/' ~ product.image) }}" 
+                                    alt="{{ product.name | truncate(10)}}"> 
+                                <p class="text-center">{{ product.name | truncate(20) }}</p>   
+                            </div>                        
+                        </div>
+                    {% endfor %}                        
+                </div>                    
+            </div>
+        {% endif %}
+
+    </main>
 
 {% endblock %}
