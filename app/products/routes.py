@@ -72,8 +72,8 @@ def generate_product():
             "price": product.price,
             "image": product.image,
             "timestamp": product.timestamp.strftime('%Y-%m-%d'),
-            "username": user.username,
-            "avatar": user.avatar(24)
+            "username": current_user.username,
+            "avatar": current_user.avatar(24)
         }
     }), 201
 
