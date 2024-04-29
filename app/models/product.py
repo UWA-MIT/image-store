@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from flask import current_app
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 from app import db
@@ -28,7 +29,7 @@ class Product(db.Model):
 
     def generate_image(self, category):
         client = OpenAI(
-            api_key='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'
+            api_key=current_app.config['OPENAI_API_KEY']
         )
         response = client.images.generate(
             model="dall-e-2",
