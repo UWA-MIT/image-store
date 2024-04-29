@@ -28,6 +28,8 @@ class Config:
     PURCHASE_COUNT_FOR_SAME_TYPE=5
     REWARD_MONEY_FOR_PURCHASE_SAME_TYPE=25    
 
+    REMEMBER_ME_DAYS=7
+
 class TestConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'tests/test.db')
