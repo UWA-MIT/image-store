@@ -3,16 +3,16 @@
 {% block content %}
     <div class="product-listing mt-3 mb-5">
         
-
+        <!-- Section header with title and button to generate new image -->
         <h1>My Purchased Items</h1>
         <p>All items purchased by you.</p>
 
+        <!-- Loop through each product and include the product.html template -->
         {% for product in products %}
-
             {% include 'product.html' %}
-        
         {% endfor %}
         
+        <!-- Pagination navigation -->
         <nav aria-label="Post navigation">
             <ul class="pagination">
                 <li class="page-item{% if not prev_url %} disabled{% endif %}">
