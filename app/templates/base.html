@@ -40,17 +40,17 @@
 
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link pretty-link" aria-current="page" href="{{ url_for('main.index') }}"><span>Home</span></a>
+              <a class="{{ 'active' if request.endpoint == 'main.index' else '' }} nav-link pretty-link" aria-current="page" href="{{ url_for('main.index') }}"><span>Home</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link pretty-link" aria-current="page" href="{{ url_for('products.buy') }}"><span>Buy</span></a>
+              <a class="{{ 'active' if request.endpoint == 'products.buy' else '' }} nav-link pretty-link" aria-current="page" href="{{ url_for('products.buy') }}"><span>Buy</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link pretty-link" aria-current="page" href="{{ url_for('products.sell') }}"><span>Sell</span></a>
+              <a class="{{ 'active' if request.endpoint == 'products.sell' else '' }} nav-link pretty-link" aria-current="page" href="{{ url_for('products.sell') }}"><span>Sell</span></a>
             </li>
               {% if not current_user.is_anonymous %}
                 <li class="nav-item">
-                    <a class="nav-link pretty-link" aria-current="page" href="{{ url_for('products.my_purchases') }}"><span>My purchases</span></a>
+                    <a class="{{ 'active' if request.endpoint == 'products.my_purchases' else '' }} nav-link pretty-link" aria-current="page" href="{{ url_for('products.my_purchases') }}"><span>My purchases</span></a>
                 </li>
               {% endif %}
           </ul>
@@ -66,10 +66,10 @@
 
             {% if current_user.is_anonymous %}
                 <li class="nav-item">
-                    <a class="nav-link pretty-link" aria-current="page" href="{{ url_for('auth.login') }}"><span>Login</span></a>
+                    <a class="{{ 'active' if request.endpoint == 'auth.login' else '' }} nav-link pretty-link" aria-current="page" href="{{ url_for('auth.login') }}"><span>Login</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link pretty-link" aria-current="page" href="{{ url_for('auth.register') }}"><span>Registration</span></a>
+                    <a class="{{ 'active' if request.endpoint == 'auth.register' else '' }} nav-link pretty-link" aria-current="page" href="{{ url_for('auth.register') }}"><span>Registration</span></a>
                 </li>
             {% else %}
 

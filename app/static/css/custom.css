@@ -61,7 +61,7 @@ footer img {
 .nav-link,.pretty-link span {
     position: relative
 }
-.nav-item.active .pretty-link span:before,.pretty-link span:hover:before {
+.nav-item.active .pretty-link span:before, .pretty-link span:hover:before, .navbar-nav .nav-item .active span:before {
     width: 100%
 }
 .pretty-link span:after,.pretty-link span:before {
