@@ -58,7 +58,7 @@ def generate_product():
 
     # Creating new product object with extracted details
     product = Product(name=name, category=category, price=price, seller_id=current_user.id)
-    product.image = product.generate_image(product.category)
+    product.image = product.generate_image(product.name, product.category)
 
     # Checking if image generation was successful
     if product.image is None:

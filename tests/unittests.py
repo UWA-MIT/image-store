@@ -56,7 +56,7 @@ class Test(unittest.TestCase):
 
     def testGenerateImage(self):
         product1 = db.session.get(Product, 1)
-        filename = product1.generate_image(product1.category)
+        filename = product1.generate_image(product1.name, product1.category)
         path = os.path.join(basedir, '../app/static/images/nft/' + filename)
         self.assertTrue(os.path.exists(path))
         self.assertFalse(os.path.exists(path + 'lal'))
