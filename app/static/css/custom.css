@@ -96,8 +96,8 @@ footer img {
 }
 
 /* Styles for active navigation links */
-.nav-item.active .pretty-link span:before,.pretty-link span:hover:before {
-    width: 100%;
+.nav-item.active .pretty-link span:before, .pretty-link span:hover:before, .navbar-nav .nav-item .active span:before {
+    width: 100%
 }
 
 /* Styles for custom link span */
