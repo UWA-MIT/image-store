@@ -58,7 +58,7 @@
 
             <li class="nav-item">
               <form class="d-lg-flex align-items-md-center" action="{{ searchPath if searchPath else url_for('products.buy') }}" method="GET" role="search" >
-    		        <input class="form-control-sm me-2 mw-sm-50" type="search" name="q" placeholder="Search" aria-label="Search">
+    		        <input class="form-control-sm me-2 mw-sm-50" type="search" name="q" id="nav-search-input" placeholder="Search" {% if request.args.get('q'): %} value="{{ request.args.get('q') }}" {% endif %} aria-label="Search">
     		        <button class="pretty-btn nav-link btn-sm prettygrey" type="submit">Search</button>
     		      </form>
             </li>
@@ -106,7 +106,7 @@
       {% with messages = get_flashed_messages() %}
       {% if messages %}
         {% for message in messages %}
-        <div class="alert alert-info" role="alert">{{ message }}</div>
+        <div class="alert alert-info alert-auto-disappear" role="alert">{{ message }}</div>
         {% endfor %}
       {% endif %}
       {% endwith %}

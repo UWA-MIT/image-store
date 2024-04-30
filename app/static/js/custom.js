@@ -30,8 +30,7 @@ $(document).ready(function () {
                     alertInfo(xhr.responseJSON.message);
                 } else {
                     alertInfo(error);
-                }
-            
+                }
                 generateForm.modal('hide');
                 overlay.hide();
             }
@@ -48,46 +47,54 @@ $(document).ready(function () {
     });
   });
 
+  // Implement clear search function when clicking on clear x icon
+    const searchInput = document.getElementById('nav-search-input');
 
-  // Slick carousal
-  $('.latest-images-carousel').slick({
-      dots: true,
-      infinite: false,
-      autoplay: true,
-      speed: 300,
-      slidesToShow: 4,
-      slidesToScroll: 4,
-      // centerMode: true,
-      // centerPadding: '60px',
-      responsive: [
-        {
-          breakpoint: 1024,
-          settings: {
-            slidesToShow: 3,
-            slidesToScroll: 3,
-            infinite: true,
-            dots: true
-          }
-        },
-        {
-          breakpoint: 600,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 2,
-            centerMode: true,
-            centerPadding: '40px',
-          }
-        },
-        {
-          breakpoint: 480,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            centerMode: true,
-            centerPadding: '30px',
-          }
+    // Add an input event listener
+    searchInput.addEventListener('input', function(event) {
+        // Check if the input value is empty
+        if (event.target.value === '') {
+            $(searchInput).parent('form').submit()
         }
-      ]
+    });
+
+
+    $('.latest-images-carousel').slick({
+        dots: true,
+        infinite: false,
+        autoplay: true,
+        speed: 300,
+        slidesToShow: 4,
+        slidesToScroll: 4,
+        responsive: [
+            {
+                breakpoint: 1200,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    infinite: true,
+                    dots: true
+                }
+            },
+            {
+                breakpoint: 991,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 2,
+                    infinite: true,
+                    dots: true
+                }
+            },
+            {
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    infinite: true,
+                    dots: true
+                }
+            }
+        ]
     });
 });
 
@@ -148,5 +155,11 @@ function renderImage(obj, data) {
 }
 
 function alertInfo(message) {
-    $('.base').prepend('<div class="alert alert-info" role="alert">' + message + '</div>');
+    $('.base').prepend('<div class="alert alert-info alert-auto-disappear" role="alert" id="alert">' + message + '</div>');
+    setTimeout(function() {
+        $('.alert-auto-disappear').fadeOut('slow', function() {
+            $(this).remove();
+        });
+    }, 5000);
 }
+
