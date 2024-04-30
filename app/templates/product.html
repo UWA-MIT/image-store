@@ -1,25 +1,33 @@
-            <div data-id="{{ product.id }}" class="card area">
-              <img alt="{{ product.name }}" class="card-img-top" src="{{ url_for('static', filename='images/nft/' ~ product.image) }}" />
-              <div class="card-body">
-                  <h6 class="card-title">{{ product.name | truncate(10)}} <span class="category">({{ product.category }})</span></h6>
-                <p class="card-text ">
-                    <small class="price">${{ product.price }}</small> &bull;
-                    <small>{{ product.timestamp.strftime('%Y-%m-%d') }}</small>
-                </p>
-              </div>
-              <div class="card-footer">
-                <div class="row align-items-center g-2">
-                  <div class="col-auto">
-                    <img src="{{ product.seller.avatar(24) }}" class="rounded-circle avatar-xs" alt="avatar">
-                  </div>
-                  <div class="col-auto">
-                    <span>{{ product.seller.username }}</span>
-                  </div>
-                  <div class="col-auto">
-                    {% if product.is_sold == False and product.seller_id != current_user.id %}
-                        <button onclick="transferDataToModal(this)" data-id="{{ product.id }}" data-name="{{ product.name }}" data-price="{{ product.price | round | int }}" type="button" class="pretty-btn nav-link btn-sm" data-bs-toggle="modal" data-bs-target="#buyModal">Buy</button>
-                    {% endif %}
-                  </div>
-                </div>
-              </div>
+<!-- This HTML template defines the structure for displaying individual product cards in the BuySell web application. -->
+<div data-id="{{ product.id }}" class="card area">
+    <!-- Product image -->
+    <img alt="{{ product.name }}" class="card-img-top" src="{{ url_for('static', filename='images/nft/' ~ product.image) }}" />
+    <div class="card-body">
+        <!-- Product title and category -->
+        <h6 class="card-title">{{ product.name | truncate(10)}} <span class="category">({{ product.category }})</span></h6>
+        <!-- Product price and timestamp -->
+        <p class="card-text">
+            <small class="price">${{ product.price }}</small> &bull;
+            <small>{{ product.timestamp.strftime('%Y-%m-%d') }}</small>
+        </p>
+    </div>
+    <div class="card-footer">
+        <!-- Seller information -->
+        <div class="row align-items-center g-2">
+            <div class="col-auto">
+                <!-- Seller avatar -->
+                <img src="{{ product.seller.avatar(24) }}" class="rounded-circle avatar-xs" alt="avatar">
             </div>
+            <div class="col-auto">
+                <!-- Seller username -->
+                <span>{{ product.seller.username }}</span>
+            </div>
+            <div class="col-auto">
+                <!-- Buy button -->
+                {% if product.is_sold == False and product.seller_id != current_user.id %}
+                    <button onclick="transferDataToModal(this)" data-id="{{ product.id }}" data-name="{{ product.name }}" data-price="{{ product.price | round | int }}" type="button" class="pretty-btn nav-link btn-sm" data-bs-toggle="modal" data-bs-target="#buyModal">Buy</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

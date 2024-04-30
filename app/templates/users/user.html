@@ -1,99 +1,88 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-
-<section id="profile" class="xh-100 gradient-custom-2">
-  <div class="container py-5 xh-100" style="padding-top: 1rem!important">
-    <div class="row d-flex justify-content-center align-items-center xh-100x">
-      <div class="col col-lg-12 col-xl-12 area">
-        <div class="card-none">
-          <div class="rounded-top-none text-white d-flex flex-row profile-bg1">
-            <div class="ms-4 mt-5 d-flex flex-column text-center" style="width: 150px;">
-              <img src="{{ user.avatar(150) }}"
-                alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2 avatar"
-                style="width: 150px; z-index: 1">
-              
-              <a class="mb-2" data-mdb-ripple-color="dark"
-                style="z-index: 1;" href="{{ url_for('users.edit_profile') }}">Edit profile</a>
+    <!-- This HTML template extends the base.html layout and defines the content for the user profile page in the BuySell web application. -->
+    <section id="profile" class="xh-100 gradient-custom-2">
+        <div class="container py-5 xh-100" style="padding-top: 1rem!important">
+            <div class="row d-flex justify-content-center align-items-center xh-100x">
+                <div class="col col-lg-12 col-xl-12 area">
+                    <div class="card-none">
+                        <div class="rounded-top-none text-white d-flex flex-row profile-bg1">
+                            <!-- User profile image and edit profile link -->
+                            <div class="ms-4 mt-5 d-flex flex-column text-center" style="width: 150px;">
+                                <img src="{{ user.avatar(150) }}"
+                                     alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2 avatar"
+                                     style="width: 150px; z-index: 1">
+                                <a class="mb-2" data-mdb-ripple-color="dark"
+                                   style="z-index: 1;" href="{{ url_for('users.edit_profile') }}">Edit profile</a>
+                            </div>
+                            <!-- User name and username -->
+                            <div class="ms-3" style="margin-top: 130px; color: #333;">
+                                <h5>{{ user.name }}</h5>
+                                <p class="username">{{ user.username }}</p>
+                            </div>
+                        </div>
+                        <!-- User stats section -->
+                        <div class="p-4 text-black profile-bg2">
+                            <div class="d-flex justify-content-end text-center py-1">
+                                <div>
+                                    <p class="mb-1 h5">{{ image_count }}</p>
+                                    <p class="small text-muted mb-0">Images</p>
+                                </div>
+                                <div class="px-3">
+                                    <p class="mb-1 h5">{{ purchase_count }}</p>
+                                    <p class="small text-muted mb-0">Purchases</p>
+                                </div>
+                                <div>
+                                    <p class="mb-1 h5">${{ user.money }}</p>
+                                    <p class="small text-muted mb-0">Money</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- User about section -->
+                        <div class="card-body-none p-4-none text-black" style="margin-top: 1.5rem">
+                            <div class="mb-5">
+                                <p class="lead fw-normal mb-1 text-white">About</p>
+                                <div class="p-4 profile-bg2">
+                                    <p class="font-italic mb-1 about-me">{% if user.about_me %}Bio: {{ user.about_me }} {% endif %}</p>
+                                    <p class="font-italic mb-1">{% if user.email %} Email: {{ user.email }} {% endif %}</p>
+                                    <p class="font-italic mb-0">{% if user.last_seen %} Last seen on: {{ user.last_seen }} {% endif %}</p>
+                                </div>
+                                <!-- Recent rewards section -->
+                                <p class="lead fw-normal mb-1 text-white mt-1">Recent rewards (latest 20)</p>
+                                <div class="p-4 profile-bg3">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Reason</th>
+                                                <th scope="col">Type</th>
+                                                <th scope="col">Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% if recent_rewards: %}
+                                                {% for reward in recent_rewards: %}
+                                                    <tr>
+                                                        <td>{{ reward.timestamp.strftime('%d-%m-%Y') }}</td>
+                                                        <td>{{ reward.reason }}</td>
+                                                        <td>{{ reward.reward_type }}</td>
+                                                        <td>{% if reward.reward_type == 'Debit' %}- {% endif %}{{ reward.amount }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% else: %}
+                                                <tr>
+                                                    <td colspan="4">No rewards found in the system</td>
+                                                </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="ms-3" style="margin-top: 130px; color: #333;">
-              <h5>{{ user.name }}</h5>
-              <p class="username">{{ user.username }}</p>
-            </div>
-          </div>
-          <div class="p-4 text-black profile-bg2">
-            <div class="d-flex justify-content-end text-center py-1">
-              <div>
-                <p class="mb-1 h5">{{ image_count }}</p>
-                <p class="small text-muted mb-0">Images</p>
-              </div>
-              <div class="px-3">
-                <p class="mb-1 h5">{{ purchase_count }}</p>
-                <p class="small text-muted mb-0">Purchases</p>
-              </div>
-              <div>
-                <p class="mb-1 h5">${{ user.money }}</p>
-                <p class="small text-muted mb-0">Money</p>
-              </div>
-            </div>
-          </div>
-          <div class="card-body-none p-4-none text-black" style="margin-top: 1.5rem">
-            <div class="mb-5">
-
-              <p class="lead fw-normal mb-1 text-white">About</p>
-              <div class="p-4 profile-bg2">
-                <p class="font-italic mb-1 about-me">{% if user.about_me %}Bio: {{ user.about_me }} {% endif %}</p>
-                <p class="font-italic mb-1">{% if user.email %} Email: {{ user.email }} {% endif %}</p>
-                <p class="font-italic mb-0">{% if user.last_seen %} Last seen on: {{ user.last_seen }} {% endif %}</p>
-              </div>
-
-              <p class="lead fw-normal mb-1 text-white mt-1">Recent rewards (latest 20)</p>
-              <div class="p-4 profile-bg3">
-
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th scope="col">Date</th>
-                      <th scope="col">Reason</th>
-                      <th scope="col">Type</th>
-                      <th scope="col">Amount</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% if recent_rewards: %}
-
-                        {% for reward in recent_rewards: %}
-                        <tr>
-                          <td>{{ reward.timestamp.strftime('%d-%m-%Y') }}</td>
-                          <td>{{ reward.reason }}</td>
-                          <td>{{ reward.reward_type }}</td>
-                          <td>
-                              {% if reward.reward_type == 'Debit' %}
-                              - 
-                              {% endif %}{{ reward.amount }}
-                          </td>
-                        </tr>
-                        {% endfor %}
-
-                    {% else: %}
-                      <tr>
-                          <td colspan="4">No rewards found in the system</td>
-                        </tr>
-                    {% endif %}
-
-                  </tbody>
-                </table>
-
-              </div>
-
-
-            </div>
-          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-
+    </section>
 {% endblock %}
