@@ -50,7 +50,7 @@ def generate_product():
         return jsonify({'success': False, 'message': 'Price cannot exceed $10'}), 400
 
     product = Product(name=name, category=category, price=price, seller_id=current_user.id)
-    product.image = product.generate_image(product.category)
+    product.image = product.generate_image(product.name, product.category)
 
     if product.image is None:
         flash('Error during the image generation, try again later!')

@@ -27,13 +27,13 @@ class Product(db.Model):
 
     seller = so.relationship('User', foreign_keys=[seller_id], backref='products_selling')
 
-    def generate_image(self, category):
+    def generate_image(self, name, category):
         client = OpenAI(
             api_key=current_app.config['OPENAI_API_KEY']
         )
         response = client.images.generate(
             model="dall-e-2",
-            prompt=category,
+            prompt=category + ": " + name,
             n=1,
             size="256x256"
         )
