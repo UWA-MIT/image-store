@@ -8,8 +8,6 @@ from app.models.product import Product
 from app.models.user import User
 from app.models.reward import Reward
 from app.products import bp
-
-
 from flask_login import current_user, login_required
 from sqlalchemy.sql.operators import like_op
 
@@ -41,6 +39,10 @@ def generate_product():
     
     if not data:
         return jsonify({'success': False, 'message': 'No data received'}), 400
+    
+    unsold_image_count = Product.query.filter_by(seller_id=current_user.id,is_sold = False).count()
+    if unsold_image_count >=10:
+        return jsonify({'success': False, 'message': 'You\'ve reached the maximum limit of unsold images. Please sell something first before adding more.'}), 400
 
     name = data.get('name')
     category = data.get('category')
@@ -55,6 +57,9 @@ def generate_product():
     if product.image is None:
         flash('Error during the image generation, try again later!')
         return
+    # if product.image == 0:
+    #     flash('Cannot generate more image! Try selling few images first :)')
+    #     return
 
     db.session.add(product)
     db.session.commit()

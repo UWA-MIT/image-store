@@ -45,7 +45,7 @@ class Product(db.Model):
         except Exception as e:
             print(e)
             pass
-
+        
         return None
 
     def check_url_exists(self, url):
