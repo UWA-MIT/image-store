@@ -365,6 +365,7 @@ body {
 .counter {
     font: 800 40px system-ui;
 }
+
 .cut-corner {
     clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
 }
@@ -382,3 +383,25 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+@media (max-width: 575.98px) { 
+    input[type=search] {
+        max-width: 50% !important;
+
+    }
+}
+
+@media (max-width: 767.98px) { 
+    input[type=search] {
+        max-width: 100px !important;
+
+    }
+}
+
+
+@media (max-width: 991.98px) { 
+    input[type=search] {
+        max-width: 120px !important;
+        
+    }
+ }

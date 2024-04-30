@@ -57,8 +57,8 @@
           <ul class="navbar-nav mb-2 mb-lg-0">
 
             <li class="nav-item">
-              <form class="d-flex " action="{{ searchPath if searchPath else url_for('products.buy') }}" method="GET" role="search" >
-    		        <input class="form-control-sm me-2" type="search" name="q" id="nav-search-input" placeholder="Search" value="{% if request.args.get('q'): %} {{ request.args.get('q') }} {% endif %}" aria-label="Search">
+              <form class="d-lg-flex align-items-md-center" action="{{ searchPath if searchPath else url_for('products.buy') }}" method="GET" role="search" >
+    		        <input class="form-control-sm me-2 mw-sm-50" type="search" name="q" id="nav-search-input" placeholder="Search" {% if request.args.get('q'): %} value="{{ request.args.get('q') }}" {% endif %} aria-label="Search">
     		        <button class="pretty-btn nav-link btn-sm prettygrey" type="submit">Search</button>
     		      </form>
             </li>
@@ -72,7 +72,7 @@
                 </li>
             {% else %}
 
-                <li class="money nav-item d-flex align-items-center pt-0 pt-0 pb-0 fs-5">
+                <li class="money nav-item d-lg-flex align-items-center pt-0 pt-0 pb-0 fs-5">
                     <span>${{ current_user.money }}</span>
                 </li>
             <li class="nav-item dropdown">
