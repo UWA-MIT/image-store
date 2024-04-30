@@ -4,7 +4,7 @@ from flask import current_app
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 from app import db
-from openai import OpenAI  # Assuming OpenAI library is used for AI-related functionalities
+from openai import OpenAI
 import requests
 import uuid
 import time
