@@ -30,7 +30,7 @@ $(document).ready(function () {
                     alertInfo(xhr.responseJSON.message);
                 } else {
                     alertInfo(error);
-                }
+                }
             
                 generateForm.modal('hide');
                 overlay.hide();
@@ -148,5 +148,11 @@ function renderImage(obj, data) {
 }
 
 function alertInfo(message) {
-    $('.base').prepend('<div class="alert alert-info" role="alert">' + message + '</div>');
+    $('.base').prepend('<div class="alert alert-info alert-auto-disappear" role="alert" id="alert">' + message + '</div>');
+    setTimeout(function() {
+        $('.alert-auto-disappear').fadeOut('slow', function() {
+            $(this).remove();
+        });
+    }, 5000);
 }
+
