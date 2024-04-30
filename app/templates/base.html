@@ -59,9 +59,9 @@
 
             <li class="nav-item">
               <form class="d-lg-flex align-items-md-center" action="{{ searchPath if searchPath else url_for('products.buy') }}" method="GET" role="search" >
-    		        <input class="form-control-sm me-2 mw-sm-50" type="search" name="q" id="nav-search-input" placeholder="Search" {% if request.args.get('q'): %} value="{{ request.args.get('q') }}" {% endif %} aria-label="Search">
+    		        <input class="form-control-sm me-2 mw-sm-50" type="search" name="q" id="nav-search-input" placeholder="Search" {% if request.args.get('q') %} value="{{ request.args.get('q') }}" {% endif %} aria-label="Search">
     		        <button class="pretty-btn nav-link btn-sm prettygrey" type="submit">Search</button>
-    		      </form>
+              </form>
             </li>
 
             {% if current_user.is_anonymous %}
@@ -85,10 +85,8 @@
                 <li class="pb-2"><a href="{{ url_for('users.user', username=current_user.username) }}">View Profile</a></li>
                 <li class="pb-2"><a href="{{ url_for('users.edit_profile') }}">Edit Profile</a></li>
                 <li class="pb-2"><a href="{{ url_for('auth.change_password') }}">Change password</a> </li>
+                <li class="pb-2"><a href="{{ url_for('auth.logout') }}">Logout</a> </li>
               </ul>
-            </li>
-            <li class="nav-item">
-              <a id="logout" class="nav-link" aria-current="page" href="{{ url_for('auth.logout') }}">Logout</a>
             </li>
 
             {% endif %}
@@ -103,11 +101,11 @@
   </div>
 
 
-    <div class="container mt-3 base">
+    <div class="container base">
       {% with messages = get_flashed_messages() %}
       {% if messages %}
         {% for message in messages %}
-        <div class="alert alert-info alert-auto-disappear" role="alert">{{ message }}</div>
+        <div class="alert-message alert alert-info alert-auto-disappear" role="alert">{{ message }}</div>
         {% endfor %}
       {% endif %}
       {% endwith %}

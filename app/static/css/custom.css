@@ -206,7 +206,7 @@ textarea {
 }
 .product-listing .area {
     padding: 5px !important;
-    width: 13rem;
+    width: 15rem;
     display: inline-block;
     margin: 0 15px 15px 0 !important;
     color: white;
@@ -407,4 +407,15 @@ body {
  }
 .navbar-toggler-icon {
     filter: invert(27%) sepia(93%) saturate(7477%) hue-rotate(350deg) brightness(101%) contrast(101%);
+}
+input[type="search"]::-webkit-search-cancel-button {
+    color: #ff3549;
+    cursor: pointer;
+}
+.alert-message.alert.alert-info {
+    border-radius: 0;
+    color: bisque;
+}
+#profile .area{
+    margin-top: 0 !important;
 }
