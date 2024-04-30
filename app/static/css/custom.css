@@ -1,53 +1,84 @@
+/**
+ * Styles for the overall layout and appearance of the web page.
+ */
+
+/* General styles for the entire page */
 body,html {
     overflow-x: hidden;
-    max-width: 100%
+    max-width: 100%;
 }
+
+/* Font and background styles for the body */
 body {
-    font-family: 'Oswald',sans-serif;
+    font-family: 'Oswald', sans-serif;
     background-color: #1b0f23;
     color: #fff;
     word-wrap: break-word;
-    letter-spacing: .5px
+    letter-spacing: .5px;
 }
+
+/* Styling for anchor links */
 a {
     text-decoration: none;
 }
+
+/* Styling for unclassed anchor links */
 a,a:not([href]):not([class]) {
-    color: #6b54b6
+    color: #6b54b6;
 }
+
+/* Styling for anchor links on hover */
 a:hover,a:not([href]):not([class]):hover {
     color: #ff3549;
-    text-decoration: none
+    text-decoration: none;
 }
+
+/* Styling for buttons and input[type=submit] */
 button, input[type=submit] {
-    outline: 0!important
+    outline: 0!important;
 }
+
+/* Heading styles */
 h1,h2,h3,h4,h5,h6 {
-    text-transform: uppercase
+    text-transform: uppercase;
 }
+
+/* Navbar styles */
 .navbar-brand {
     color: white;
 }
+
+/* Navbar brand styles on hover and focus */
 .navbar-brand:hover,.navbar-brand:focus {
     color: white;
 }
+
+/* Navbar brand image styles */
 .navbar-brand img {
     width: 75px;
     margin-right: 10px;
 }
+
+/* Footer styles */
 footer {
     background-color: #150f1a;
 }
+
+/* Footer image styles */
 footer img {
     width: 25px;
 }
+
+/* Navigation item styles */
 .nav-item {
     padding-right: 1rem;
     padding-left: 1rem;
     text-align: center;
     padding-top: 10px;
-    padding-bottom: 5px
+    padding-bottom: 5px;
 }
+
+/* Navigation link styles */
 .nav-link {
     font-weight: 600;
     line-height: 20px;
@@ -56,25 +87,35 @@ footer img {
     text-transform: uppercase;
     text-decoration: none;
     padding-right: 0!important;
-    padding-left: 0!important
+    padding-left: 0!important;
 }
+
+/* Styling for navigation links and custom link span */
 .nav-link,.pretty-link span {
-    position: relative
+    position: relative;
 }
+
+/* Styles for active navigation links */
 .nav-item.active .pretty-link span:before, .pretty-link span:hover:before, .navbar-nav .nav-item .active span:before {
     width: 100%
 }
+
+/* Styles for custom link span */
 .pretty-link span:after,.pretty-link span:before {
     content: "";
     position: absolute;
     bottom: -9px;
     height: 4px;
-    width: 0
+    width: 0;
 }
+
+/* Styles for custom link span before */
 .pretty-link span:before {
     background: #7228e2;
-    transition: all .2s ease-out
+    transition: all .2s ease-out;
 }
+
+/* Styling for custom buttons */
 .pretty-btn {
     cursor: pointer;
     border: 2px solid #6b54b6;
@@ -89,6 +130,8 @@ footer img {
     background-color: transparent;
     display: inline-block;
 }
+
+/* Styles for custom buttons before and after */
 .pretty-btn:after,.pretty-btn:before {
     content: "";
     position: absolute;
@@ -97,24 +140,34 @@ footer img {
     height: 2px;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
-    transform: rotate(45deg)
+    transform: rotate(45deg);
 }
+
+/* Styles for custom button before */
 .pretty-btn:before {
     top: 0;
-    right: -14px
+    right: -14px;
 }
+
+/* Styles for custom button after */
 .pretty-btn:after {
     bottom: 0;
-    left: -14px
+    left: -14px;
 }
+
+/* Styling for custom buttons on hover */
 .pretty-btn:hover {
-    background-position: left top
+    background-position: left top;
 }
+
+/* Styles for inline-block custom buttons */
 button.pretty-btn, input[type=submit].pretty-btn {
     display: inline-block !important;
     margin-right: 10px;
     margin-bottom: 10px;
 }
+
+/* Styles for small custom buttons */
 .pretty-btn.btn-sm {
     padding: .15rem 1.6rem !important;
     font-size: .775rem;
@@ -123,27 +176,41 @@ button.pretty-btn, input[type=submit].pretty-btn {
     margin-bottom: 0;
     font-weight: 500;
 }
+
+/* Styles for red-colored custom buttons */
 .prettyred {
     background-image: linear-gradient(45deg, #ff3549 50%, transparent 50%);
     border: 2px solid #ff3549;
 }
+
+/* Styles for red-colored custom buttons before and after */
 .prettyred:after, .prettyred:before {
     background-color: #ff3549;
 }
+
+/* Styles for green-colored custom buttons */
 .prettygreen {
     background-image: linear-gradient(45deg, green 50%, transparent 50%);
     border: 2px solid green;
 }
+
+/* Styles for green-colored custom buttons before and after */
 .prettygreen:after, .prettygreen:before {
     background-color: green;
 }
+
+/* Styles for grey-colored custom buttons */
 .prettygrey {
     background-image: linear-gradient(45deg, #3c3556 50%, transparent 50%);
     border: 2px solid #3c3556;
 }
+
+/* Styles for grey-colored custom buttons before and after */
 .prettygrey:after, .prettygrey:before {
     background-color: #3c3556;
 }
+
+/* Input field styles */
 input[type=text], input[type=email], input[type=password], input[type=number], input[type=search], textarea, select {
     position: relative;
     width: 100%;
@@ -154,26 +221,36 @@ input[type=text], input[type=email], input[type=password], input[type=number], i
     border-radius: 0;
     outline: 0;
     font-size: 20px;
-    font-family: 'Oswald',sans-serif;
-    padding: 18px 25px!important
+    font-family: 'Oswald', sans-serif;
+    padding: 18px 25px!important;
 }
+
+/* Styles for search input field */
 input[type=search] {
     padding: .25rem .5rem !important;
     font-size: .875rem;
 }
+
+/* Textarea styles */
 textarea {
-    color: #c3bace
+    color: #c3bace;
 }
+
+/* Styles for content areas */
 .area {
     background-color: #22152c;
     padding: 20px;
     box-shadow: 0 10px 27px 0 rgba(14,8,18,.5);
     margin: 40px 15px 35px !important;
 }
+
+/* Styles for content area inputs, textareas, and selects */
 .area input, textarea, select, .modal input {
     background-color: #1b0f23;
     color: #fff;
 }
+
+/* Styles for profile background images */
 .profile-bg1 {
     background-image: url('/static/images/profile-bg.webp');
     background-position: center top;
@@ -182,12 +259,14 @@ textarea {
     border-top-left-radius: 50px;
     border-top-right-radius: 50px;
 }
+
 .profile-bg2 {
     background-image: url('/static/images/profile-bg.webp');
     background-position: center bottom;
     background-repeat: no-repeat;
     background-size: cover;
 }
+
 .profile-bg3 {
     background-image: url('/static/images/profile-bg.webp');
     background-position: center bottom;
@@ -196,14 +275,20 @@ textarea {
     border-bottom-left-radius: 25px;
     border-bottom-right-radius: 25px;
 }
+
+/* Styles for avatar images */
 .avatar {
     border: 3px solid #5821a9;
     border-radius: 100%;
 }
+
+/* Dropdown menu styles */
 .dropdown-menu {
     background-color: #22152c;
     color: white !important;
 }
+
+/* Styles for product listing areas */
 .product-listing .area {
     padding: 5px !important;
     width: 15rem;
@@ -211,41 +296,59 @@ textarea {
     margin: 0 15px 15px 0 !important;
     color: white;
 }
+
+/* Styles for product listing area images */
 .product-listing .area img {
     object-fit: cover;
     object-position: top;
     max-height: 150px;
 }
+
+/* Styles for card footers */
 .card-footer {
     border-top: 1px solid #ffffff29;
 }
+
+/* Styles for disabled pagination links in product listing */
 .product-listing .pagination .disabled a {
     pointer-events: none;
     color: rgba(233, 236, 239, 0.74);
 }
+
+/* Styles for navigation in product listing */
 .product-listing nav {
     margin-top: 15px;
 }
+
+/* Styles for modal content */
 .modal-content {
     background-color: #22152c;
     padding: 20px;
     box-shadow: 0 10px 27px 0 rgba(14,8,18,.5);
     margin: 0 0 35px !important;
 }
+
+/* Styles for modal headers */
 .modal-header {
     padding: 0;
     border-bottom: none;
 }
+
+/* Styles for modal footers */
 .modal-footer {
     padding: 0;
     border-top: none;
 }
+
+/* Styles for modal titles */
 .modal-title {
     font-size: 25px;
     margin: 0 0 18px;
     position: relative;
     padding-left: 15px;
 }
+
+/* Styles for modal title before */
 .modal-title:before {
     height: 100%;
     width: 3px;
@@ -255,6 +358,8 @@ textarea {
     display: block;
     content: '';
 }
+
+/* Styles for alert messages */
 .alert-message {
     background-color: transparent;
     border: 2px solid #6b54b6;
@@ -268,39 +373,44 @@ textarea {
     padding: 15px !important;
     font-size: 20px;
 }
-.alert-message:after, .alert-message:before {
-    content: "";
-    position: absolute;
-    background-color: #6b54b6;
-    width: 60px;
-    height: 2px;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-}
+
+/* Styles for red-colored alert messages */
 .red-message {
     border-color: #ff3549;
 }
+
+/* Styles for red-colored alert messages before and after */
 .red-message:after, .red-message:before {
     background-color: #ff3549;
 }
+
+/* Styles for alert messages before */
 .alert-message:before {
     top: 0;
     right: -14px;
 }
+
+/* Styles for alert messages after */
 .alert-message:after {
     bottom: 14px;
     left: -28px;
 }
+
+/* Styles for modals and modal-open class */
 .modal, .modal-open {
     padding-right: 0 !important;
 }
+
+/* Styles for specific elements by ID or class */
 #nameImage, #priceImage, .money, .price {
     color: #00c900;
 }
+
 .category, .bisque {
     color: bisque;
 }
+
+/* Styles for overlay */
 #overlay {
     position: fixed;
     left: 0;
@@ -313,6 +423,8 @@ textarea {
     align-items: center;
     justify-content: center;
 }
+
+/* Styles for loader */
 .loader {
     border: 8px solid #f3f3f3;
     border-top: 8px solid #ff3549;
@@ -321,15 +433,21 @@ textarea {
     height: 50px;
     animation: spin 2s linear infinite;
 }
+
+/* Styles for loading message */
 .loading-message {
     color: white;
     font-size: 40px;
     font-weight: bold;
 }
+
+/* Keyframes for spinner animation */
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* Background image styles for body */
 body {
     background-image: url(/static/images/background.jpg);
     background-size: cover;
@@ -337,44 +455,66 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
+
+/* Styles for intro section headings */
 .intro h1 {
     text-transform: capitalize !important;
     font-weight: 600 !important;
 }
+
+/* Styles for intro section icons */
 .intro .bi-1-square {
     color: #ff3549;
 }
+
 .intro .bi-2-square {
     color: #6b54b6;
 }
+
+/* Styles for statistics section headings */
 .stats h2 {
     text-transform: none;
 }
+
+/* Counter property */
 @property --num {
   syntax: "<integer>";
   initial-value: 0;
   inherits: false;
 }
+
+/* Counter transition */
 .counter span {
   transition: --num 5s;
   counter-set: num var(--num);
 }
+
+/* Counter display */
 .counter span::after {
-  content: counter(num);
+    content: counter(num);
 }
+
+/* Counter styles */
 .counter {
     font: 800 40px system-ui;
 }
 
+/* Clip-path for cutting corners */
 .cut-corner {
     clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
 }
+
+/* Styles for slick carousel previous button */
 .slick-prev {
     margin-left: 5px;
 }
+
+/* Styles for slick carousel next button */
 .slick-next {
     margin-right: 5px;
 }
+
+/* Styles for slick carousel previous and next buttons */
 .slick-prev:before, .slick-next:before {
     color: #6b54b6;
     font-size: calc(1.2rem + 1.4vw);
@@ -384,27 +524,28 @@ body {
     transform: translate(-50%, -50%);
 }
 
+/* Media query for search input on small screens */
 @media (max-width: 575.98px) { 
     input[type=search] {
         max-width: 50% !important;
-
     }
 }
 
+/* Media query for search input on medium screens */
 @media (max-width: 767.98px) { 
     input[type=search] {
         max-width: 100px !important;
-
     }
 }
 
-
+/* Media query for search input on large screens */
 @media (max-width: 991.98px) { 
     input[type=search] {
         max-width: 120px !important;
-        
     }
- }
+}
+
+/* Styles for navbar toggler icon */
 .navbar-toggler-icon {
     filter: invert(27%) sepia(93%) saturate(7477%) hue-rotate(350deg) brightness(101%) contrast(101%);
 }
