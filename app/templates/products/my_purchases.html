@@ -2,9 +2,14 @@
 
 {% block content %}
     <div class="product-listing mt-3 mb-5">
-        
         <!-- Section header with title and button to generate new image -->
-        <h1>My Purchased Items</h1>
+        <div class="d-flex align-items-center mb-2">
+            <h1 class="d-inline-block mb-0 me-4">My Purchased Items</h1>
+            {% if request.args.get('q') %}
+                <a class="d-inline-block pretty-btn nav-link prettygrey" href="{{ url_for('products.my_purchases') }}">Reset search</a>
+            {% endif %}
+        </div>
+
         <p>All items purchased by you.</p>
 
         <!-- Loop through each product and include the product.html template -->

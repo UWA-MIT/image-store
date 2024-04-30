@@ -180,7 +180,7 @@ function renderImage(obj, data) {
 
 // Function to display alert message
 function alertInfo(message) {
-    $('.base').prepend('<div class="alert alert-info alert-auto-disappear" role="alert" id="alert">' + message + '</div>');
+    $('.base').prepend('<div class="alert-message alert alert-info alert-auto-disappear" role="alert" id="alert">' + message + '</div>');
     hideAlert(5000);
 }
 
