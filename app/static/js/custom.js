@@ -1,10 +1,9 @@
 $(document).ready(function () {
     $('form').on('submit', function () {
-        const submit = $('#submit');
-        submit.prop('disabled', true);
-        submit.text('Loading...');
+        disableSubmitBtn(true);
     });
-    const generateForm = $('#generateModal');
+    const generateForm = $('#generateForm');
+    const generateModal = $('#generateModal');
     const overlay = $('#overlay');
     generateForm.on('submit', function (e) {
         e.preventDefault();
@@ -21,8 +20,9 @@ $(document).ready(function () {
             }),
             success: function (response) {
                 generateForm.trigger("reset");
-                generateForm.modal('hide');
+                generateModal.modal('hide');
                 overlay.hide();
+                disableSubmitBtn(false);
                 renderImage($('.products'), response.data);
             },
             error: function (xhr, status, error) {
@@ -31,8 +31,9 @@ $(document).ready(function () {
                 } else {
                     alertInfo(error);
                 }
-                generateForm.modal('hide');
+                generateModal.modal('hide');
                 overlay.hide();
+                disableSubmitBtn(false);
             }
         });
     });
@@ -96,6 +97,13 @@ $(document).ready(function () {
             }
         ]
     });
+    hideAlert(5000);
+    disableSubmitBtn(false)
+    $(window).on('pageshow', function(event) {
+        if (event.originalEvent.persisted) {
+            window.location.reload();
+        }
+    });
 });
 
 function transferDataToModal(elem) {
@@ -156,10 +164,23 @@ function renderImage(obj, data) {
 
 function alertInfo(message) {
     $('.base').prepend('<div class="alert alert-info alert-auto-disappear" role="alert" id="alert">' + message + '</div>');
+    hideAlert(5000);
+}
+
+function hideAlert(time){
     setTimeout(function() {
         $('.alert-auto-disappear').fadeOut('slow', function() {
             $(this).remove();
         });
-    }, 5000);
+    }, time);
 }
 
+function disableSubmitBtn(disable) {
+    const submit = $('#submit');
+    submit.prop('disabled', disable);
+    if(disable) {
+        submit.text('Loading...');
+    } else {
+        submit.text(submit.data('text'));
+    }
+}
