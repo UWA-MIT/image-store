@@ -48,6 +48,17 @@ $(document).ready(function () {
     });
   });
 
+  // Implement clear search function when clicking on clear x icon
+    const searchInput = document.getElementById('nav-search-input');
+
+    // Add an input event listener
+    searchInput.addEventListener('input', function(event) {
+        // Check if the input value is empty
+        if (event.target.value === '') {
+            $(searchInput).parent('form').submit()
+        }
+    });
+
 
   // Slick carousal
   $('.latest-images-carousel').slick({
