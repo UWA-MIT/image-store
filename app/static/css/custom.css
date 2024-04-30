@@ -405,3 +405,6 @@ body {
         
     }
  }
+.navbar-toggler-icon {
+    filter: invert(27%) sepia(93%) saturate(7477%) hue-rotate(350deg) brightness(101%) contrast(101%);
+}
