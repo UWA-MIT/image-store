@@ -1,17 +1,21 @@
+# Importing necessary modules
 from datetime import datetime, timezone
 from flask import current_app
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 from app import db
-from openai import OpenAI
+from openai import OpenAI  # Assuming OpenAI library is used for AI-related functionalities
 import requests
 import uuid
 import time
 import os
+
+# Define the base directory
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-
+# Product model class
 class Product(db.Model):
+    # Database columns
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.String(60))
     image = sa.Column(sa.String(256))
@@ -25,8 +29,10 @@ class Product(db.Model):
     seller_id = sa.Column(sa.Integer, sa.ForeignKey('user.id'), index=True)
     buyer_id = sa.Column(sa.Integer, sa.ForeignKey('user.id'), index=True, default=None, nullable=True)
 
+    # Relationship with User model
     seller = so.relationship('User', foreign_keys=[seller_id], backref='products_selling')
 
+    # Method to generate an image based on the category using OpenAI
     def generate_image(self, category):
         client = OpenAI(
             api_key=current_app.config['OPENAI_API_KEY']
@@ -48,6 +54,7 @@ class Product(db.Model):
 
         return None
 
+    # Method to check if a URL exists
     def check_url_exists(self, url):
         try:
             r = requests.head(url, timeout=5)
@@ -60,6 +67,7 @@ class Product(db.Model):
         except requests.RequestException as e:
             return False
 
+    # Method to download and save an image
     def download_and_save_image(self, url):
         try:
             response = requests.get(url)
@@ -73,5 +81,6 @@ class Product(db.Model):
             print(e)
             return None
 
+# Function to get the count of images
 def image_count():
     return Product.query.count()

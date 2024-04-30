@@ -1,7 +1,16 @@
+/**
+ * This JavaScript file contains client-side code for the user interface of a web application.
+ * It handles various interactions and functionalities of the application.
+ */
+
+// Execute when the DOM is fully loaded
 $(document).ready(function () {
+    // Disable submit button on form submission
     $('form').on('submit', function () {
         disableSubmitBtn(true);
     });
+
+    // Handle form submission for generating a product
     const generateForm = $('#generateForm');
     const generateModal = $('#generateModal');
     const overlay = $('#overlay');
@@ -37,29 +46,28 @@ $(document).ready(function () {
             }
         });
     });
-  $('.counter span').each(function() {
-    const $span = $(this);
-    const count = $span.data('count');
-    $({ counter: 0 }).animate({ counter: count }, {
-      duration: 1000,
-      step: function() {
-        $span.css('--num', Math.ceil(this.counter));
-      }
+
+    // Counter animation for each span element
+    $('.counter span').each(function() {
+        const $span = $(this);
+        const count = $span.data('count');
+        $({ counter: 0 }).animate({ counter: count }, {
+            duration: 1000,
+            step: function() {
+                $span.css('--num', Math.ceil(this.counter));
+            }
+        });
     });
-  });
 
-  // Implement clear search function when clicking on clear x icon
+    // Clear search function when clicking on clear icon
     const searchInput = document.getElementById('nav-search-input');
-
-    // Add an input event listener
     searchInput.addEventListener('input', function(event) {
-        // Check if the input value is empty
         if (event.target.value === '') {
-            $(searchInput).parent('form').submit()
+            $(searchInput).parent('form').submit();
         }
     });
 
-
+    // Configure slick carousel for latest images display
     $('.latest-images-carousel').slick({
         dots: true,
         infinite: false,
@@ -97,8 +105,13 @@ $(document).ready(function () {
             }
         ]
     });
+
+    // Hide alert after specified time
     hideAlert(5000);
-    disableSubmitBtn(false)
+    // Enable submit button
+    disableSubmitBtn(false);
+
+    // Reload page on pageshow event
     $(window).on('pageshow', function(event) {
         if (event.originalEvent.persisted) {
             window.location.reload();
@@ -106,6 +119,7 @@ $(document).ready(function () {
     });
 });
 
+// Function to transfer data to modal
 function transferDataToModal(elem) {
     const id = elem.getAttribute('data-id');
     const name = elem.getAttribute('data-name');
@@ -116,6 +130,7 @@ function transferDataToModal(elem) {
     confirmButton.setAttribute('onclick', `buyImage('${id}')`);
 }
 
+// Function to handle buying an image
 function buyImage(id) {
     const url = id + '/buy';
     $.ajax({
@@ -139,6 +154,7 @@ function buyImage(id) {
     });
 }
 
+// Function to render an image
 function renderImage(obj, data) {
     $(obj).prepend(`<div data-id="${data.id}" class="card area new">
             <img alt="${data.name}" class="card-img-top" src="/static/images/nft/${data.image}">
@@ -162,11 +178,13 @@ function renderImage(obj, data) {
         </div>`);
 }
 
+// Function to display alert message
 function alertInfo(message) {
     $('.base').prepend('<div class="alert alert-info alert-auto-disappear" role="alert" id="alert">' + message + '</div>');
     hideAlert(5000);
 }
 
+// Function to hide alert after specified time
 function hideAlert(time){
     setTimeout(function() {
         $('.alert-auto-disappear').fadeOut('slow', function() {
@@ -175,6 +193,7 @@ function hideAlert(time){
     }, time);
 }
 
+// Function to enable/disable submit button
 function disableSubmitBtn(disable) {
     const submit = $('#submit');
     submit.prop('disabled', disable);
