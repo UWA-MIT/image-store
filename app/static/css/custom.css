@@ -365,3 +365,26 @@ body {
 .counter {
     font: 800 40px system-ui;
 }
+
+@media (max-width: 575.98px) { 
+    input[type=search] {
+        max-width: 50% !important;
+
+    }
+}
+
+@media (max-width: 767.98px) { 
+    input[type=search] {
+        max-width: 100px !important;
+
+    }
+}
+
+
+@media (max-width: 991.98px) { 
+    input[type=search] {
+        max-width: 120px !important;
+        
+    }
+ }
+
