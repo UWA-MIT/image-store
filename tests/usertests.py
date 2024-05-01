@@ -25,7 +25,12 @@ class Test(unittest.TestCase):
         # chrome_options.add_argument('--headless')  # Run Chrome in headless mode.
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('--disable-dev-shm-usage')
-        self.driver = webdriver.Chrome(service=service, options=chrome_options)
+        
+        if (sys.platform == 'darwin'):
+            self.driver = webdriver.Chrome(options=chrome_options)
+        else:
+            self.driver = webdriver.chrome(service=service, options=chrome_options)
+
         self.app = app.test_client()
         self.app_context = app.app_context()
         self.app_context.push()
