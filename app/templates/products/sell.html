@@ -56,16 +56,26 @@
                             <label class="form-label fs-5" for="category">Category</label>
                             <select class="mb-3" id="category" name="category" required>
                                 <option value="">Select a category</option>
+                                <option value="animal">Animal</option>
+                                <option value="art">Art</option>
                                 <option value="car">Car</option>
-                                <option value="nature">Nature</option>
-                                <option value="tree">Tree</option>
+                                <option value="cityscape">Cityscape</option>
+                                <option value="fantasy">Fantasy</option>
                                 <option value="food">Food</option>
-                                <option value="ant">Ant</option>
+                                <option value="nature">Nature</option>
+                                <option value="si-fi">Si-Fi</option>
+                                <option value="landscape">Landscape</option>
+                                <option value="portrait">Portrait</option>
                             </select>
                             <div class="mb-3">
                                 <label class="form-label fs-5" for="price">Price</label>
                                 <input id="price" name="price" placeholder="Price" required step="any" type="number">
                             </div>
+
+                            <div class="alert-message red-message mb-3 mt-3">
+                                Generating an image will deduct <span class="generate-image-reward-point">${{ generate_reward_point }}</span> from your balance.
+                            </div>
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="pretty-btn nav-link prettygrey" data-bs-dismiss="modal">Close
