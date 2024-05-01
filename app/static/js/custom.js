@@ -159,7 +159,7 @@ function renderImage(obj, data) {
     $(obj).prepend(`<div data-id="${data.id}" class="card area new">
             <img alt="${data.name}" class="card-img-top" src="/static/images/nft/${data.image}">
             <div class="card-body">
-                <h6 class="card-title">${data.name} <span class="category">(${data.category})</span></h6>
+                <h6 class="card-title">` + truncate(data.name, 7) + ` <span class="category">(${data.category})</span></h6>
                 <p class="card-text">
                     <small class="price">$${data.price}</small> •
                     <small>${data.timestamp}</small>
@@ -176,6 +176,14 @@ function renderImage(obj, data) {
                 </div>
             </div>
         </div>`);
+}
+
+function truncate(string, maxLength) {
+    if (string.length > maxLength) {
+        return string.substring(0, maxLength) + "...";
+    } else {
+        return string;
+    }
 }
 
 // Function to display alert message
