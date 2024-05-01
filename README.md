@@ -200,10 +200,18 @@ webapp
 	python -m unittest usertests.Test.testEditProfile
 	```
 
+	Run tests on Mac:
+
+	The chromedriver needs to be installed separately for macos. Use following brew command to install it.
+
+	```bash
+	brew install cask chromedriver
+	```
+
 	---
 	**NOTE**
 
-	The Selenium tests only work for Windows users who have Chrome installed.
+	The Selenium tests only work for windows and mac os users who have Chrome installed.
 
 	---
 
