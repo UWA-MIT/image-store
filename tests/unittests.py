@@ -5,6 +5,7 @@ from config import TestConfig
 from app import create_app, db
 from app.models.user import User
 from app.models.product import Product
+from app.models.reward import Reward
 import os
 
 app = create_app(TestConfig)
@@ -55,12 +56,59 @@ class Test(unittest.TestCase):
 
     def testGenerateImage(self):
         product1 = db.session.get(Product, 1)
-        filename = product1.generate_image(product1.category)
+        filename = product1.generate_image(product1.name, product1.category)
         path = os.path.join(basedir, '../app/static/images/nft/' + filename)
         self.assertTrue(os.path.exists(path))
         self.assertFalse(os.path.exists(path + 'lal'))
         os.remove(path)
 
+    def testApplyReward(self):
+        result = Reward.applyReward(reason="Test reward", amount=100, user_id=1)
+        self.assertTrue(result)
+        reward = Reward.query.filter_by(user_id=1).first()
+        self.assertIsNotNone(reward)
+        self.assertEqual(reward.amount, 100)
+
+    def testAddRewardForRegistration(self):
+        result = Reward.addRewardForRegistration(user_id=1)
+        self.assertTrue(result)
+        reward = Reward.query.filter_by(user_id=1, reason="User registration bonus.").first()
+        self.assertIsNotNone(reward)
+
+    def testDeductRewardForImageGeneration(self):
+        product = Product(name='TestProduct', category='TestCategory', price=100)
+        db.session.add(product)
+        db.session.commit()
+        result = Reward.deductRewardForImageGeneration(user_id=1, product_id=product.id)
+        self.assertTrue(result)
+        reward = Reward.query.filter_by(user_id=1, reason=f"Generated an image (Ref# {product.id}).").first()
+        self.assertIsNotNone(reward)
+
+    def testDeductRewardForPurchase(self):
+        product = Product(name='TestProduct', category='TestCategory', price=100)
+        db.session.add(product)
+        db.session.commit()
+        result = Reward.deductRewardForPurchase(user_id=1, product_id=product.id, amount=100)
+        self.assertTrue(result)
+        reward = Reward.query.filter_by(user_id=1, reason=f"Purchased an image (Ref# {product.id}).").first()
+        self.assertIsNotNone(reward)
+
+    def testAddRewardForPurchaseFromSameUserIfApplicable(self):
+        seller = User(username='TestSeller', email='testseller@mail.com')
+        db.session.add(seller)
+        db.session.commit()
+        product = Product(name='TestProduct', category='TestCategory', price=100, seller_id=seller.id, buyer_id=1)
+        db.session.add(product)
+        db.session.commit()
+        result = Reward.addRewardForPurchaseFromSameUserIfApplicable(user_id=1, product_id=product.id, seller_id=seller.id)
+        self.assertTrue(result)
+
+    def testAddRewardForPurchaseOfSameType(self):
+        product = Product(name='TestProduct', category='TestCategory', price=100, buyer_id=1)
+        db.session.add(product)
+        db.session.commit()
+        result = Reward.addRewardForPurchaseOfSameType(user_id=1, product_id=product.id, category=product.category)
+        self.assertTrue(result)
 
 if __name__ == '__main__':
     unittest.main()

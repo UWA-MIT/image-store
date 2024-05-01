@@ -1,10 +1,18 @@
+/**
+ * This JavaScript file contains custom client-side code for BuySell web application.
+ */
+
+// Execute when the DOM is fully loaded
 $(document).ready(function () {
+    
+    // Disable submit button on form submission
     $('form').on('submit', function () {
-        const submit = $('#submit');
-        submit.prop('disabled', true);
-        submit.text('Loading...');
+        disableSubmitBtn(true);
     });
-    const generateForm = $('#generateModal');
+
+    // Handle form submission for generating a product
+    const generateForm = $('#generateForm');
+    const generateModal = $('#generateModal');
     const overlay = $('#overlay');
     generateForm.on('submit', function (e) {
         e.preventDefault();
@@ -21,8 +29,9 @@ $(document).ready(function () {
             }),
             success: function (response) {
                 generateForm.trigger("reset");
-                generateForm.modal('hide');
+                generateModal.modal('hide');
                 overlay.hide();
+                disableSubmitBtn(false);
                 renderImage($('.products'), response.data);
             },
             error: function (xhr, status, error) {
@@ -31,66 +40,86 @@ $(document).ready(function () {
                 } else {
                     alertInfo(error);
                 }
-            
-                generateForm.modal('hide');
+                generateModal.modal('hide');
                 overlay.hide();
+                disableSubmitBtn(false);
             }
         });
     });
-  $('.counter span').each(function() {
-    const $span = $(this);
-    const count = $span.data('count');
-    $({ counter: 0 }).animate({ counter: count }, {
-      duration: 1000,
-      step: function() {
-        $span.css('--num', Math.ceil(this.counter));
-      }
+
+    // Counter animation for each span element
+    $('.counter span').each(function() {
+        const $span = $(this);
+        const count = $span.data('count');
+        $({ counter: 0 }).animate({ counter: count }, {
+            duration: 1000,
+            step: function() {
+                $span.css('--num', Math.ceil(this.counter));
+            }
+        });
     });
-  });
 
-
-  // Slick carousal
-  $('.latest-images-carousel').slick({
-      dots: true,
-      infinite: false,
-      autoplay: true,
-      speed: 300,
-      slidesToShow: 4,
-      slidesToScroll: 4,
-      // centerMode: true,
-      // centerPadding: '60px',
-      responsive: [
-        {
-          breakpoint: 1024,
-          settings: {
-            slidesToShow: 3,
-            slidesToScroll: 3,
-            infinite: true,
-            dots: true
-          }
-        },
-        {
-          breakpoint: 600,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 2,
-            centerMode: true,
-            centerPadding: '40px',
-          }
-        },
-        {
-          breakpoint: 480,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            centerMode: true,
-            centerPadding: '30px',
-          }
+    // Clear search function when clicking on clear icon
+    const searchInput = document.getElementById('nav-search-input');
+    searchInput.addEventListener('input', function(event) {
+        if (event.target.value === '') {
+            $(searchInput).parent('form').submit();
         }
-      ]
+    });
+
+    // Configure slick carousel for latest images display
+    $('.latest-images-carousel').slick({
+        dots: true,
+        infinite: false,
+        autoplay: true,
+        speed: 300,
+        slidesToShow: 4,
+        slidesToScroll: 4,
+        responsive: [
+            {
+                breakpoint: 1200,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    infinite: true,
+                    dots: true
+                }
+            },
+            {
+                breakpoint: 991,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 2,
+                    infinite: true,
+                    dots: true
+                }
+            },
+            {
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    infinite: true,
+                    dots: true
+                }
+            }
+        ]
+    });
+
+    // Hide alert after specified time
+    hideAlert(5000);
+    // Enable submit button
+    disableSubmitBtn(false);
+
+    // Reload page on pageshow event
+    $(window).on('pageshow', function(event) {
+        if (event.originalEvent.persisted) {
+            window.location.reload();
+        }
     });
 });
 
+// Function to transfer data to modal
 function transferDataToModal(elem) {
     const id = elem.getAttribute('data-id');
     const name = elem.getAttribute('data-name');
@@ -101,6 +130,7 @@ function transferDataToModal(elem) {
     confirmButton.setAttribute('onclick', `buyImage('${id}')`);
 }
 
+// Function to handle buying an image
 function buyImage(id) {
     const url = id + '/buy';
     $.ajax({
@@ -124,6 +154,7 @@ function buyImage(id) {
     });
 }
 
+// Function to render an image
 function renderImage(obj, data) {
     $(obj).prepend(`<div data-id="${data.id}" class="card area new">
             <img alt="${data.name}" class="card-img-top" src="/static/images/nft/${data.image}">
@@ -147,12 +178,28 @@ function renderImage(obj, data) {
         </div>`);
 }
 
+// Function to display alert message
 function alertInfo(message) {
-    $('.base').prepend('<div class="alert alert-info alert-auto-disappear" role="alert" id="alert">' + message + '</div>');
+    $('.base').prepend('<div class="alert-message alert alert-info alert-auto-disappear" role="alert" id="alert">' + message + '</div>');
+    hideAlert(5000);
+}
+
+// Function to hide alert after specified time
+function hideAlert(time){
     setTimeout(function() {
         $('.alert-auto-disappear').fadeOut('slow', function() {
             $(this).remove();
         });
-    }, 5000);
+    }, time);
 }
 
+// Function to enable/disable submit button
+function disableSubmitBtn(disable) {
+    const submit = $('#submit');
+    submit.prop('disabled', disable);
+    if(disable) {
+        submit.text('Loading...');
+    } else {
+        submit.text(submit.data('text'));
+    }
+}

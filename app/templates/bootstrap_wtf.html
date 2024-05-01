@@ -28,7 +28,7 @@
     {%- endfor %}
   </div>
   {%- elif field.type == 'SubmitField' %}
-  <button id="submit" type="submit" class="pretty-btn nav-link mb-3">{{ field.label.text }}</button>
+  <button id="submit" type="submit" class="pretty-btn nav-link mb-3" data-text="{{ field.label.text }}">{{ field.label.text }}</button>
   {%- else %}
   <div class="mb-3">
     {{ field.label(class='form-label fs-5') }}

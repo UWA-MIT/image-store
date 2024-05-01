@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+    <!-- The main index page of the BuySell web application. -->
     <main role="main" class="intro">
 
         <div class="container pb-5 pt-5">
@@ -44,24 +44,29 @@
             </div>
         </div>
 
-        {% if recent_images: %}
-            <div class="latest-images">
-                <h3 class="text-center p-3"><i class="bi bi-cup-hot"></i> Recent generated images</h2>
-
-                <div class="latest-images-carousel">                        
-                    {% for product in recent_images: %}
-                        <div class="slide-item">
-                            <div class="d-inline-block">
-                                <img src="{{ url_for('static', filename='images/nft/' ~ product.image) }}" 
-                                    alt="{{ product.name | truncate(10)}}"> 
-                                <p class="text-center">{{ product.name | truncate(20) }}</p>   
-                            </div>                        
+        {% if recent_images %}
+            <div class="container latest-images pb-5 pt-5">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2 class="text-center pb-3">Recent generated images</h2>
+                        <div class="latest-images-carousel text-center">
+                            {% for product in recent_images %}
+                                <div class="slide-item">
+                                    <div class="d-inline-block">
+                                        <img class="cut-corner"
+                                             src="{{ url_for('static', filename='images/nft/' ~ product.image) }}"
+                                             alt="{{ product.name | truncate(10) }}">
+                                        <h6 class="text-center pt-3">{{ product.name | truncate(20) }}<span
+                                                class="category"> ({{ product.category }})</span> <span
+                                                class="price">${{ product.price }}</span></h6>
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
-                    {% endfor %}                        
-                </div>                    
+                    </div>
+                </div>
             </div>
         {% endif %}
 
     </main>
-
 {% endblock %}
