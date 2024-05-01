@@ -55,3 +55,5 @@ class TestConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'tests/test.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    TEST_SERVICE_URL="http://127.0.0.1:5002" 

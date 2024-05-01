@@ -36,7 +36,7 @@ class Test(unittest.TestCase):
         self.app_context.push()
         db.create_all()
         self.driver.set_window_size(1920, 1080)
-        self.driver.get('http://127.0.0.1:5000')
+        self.driver.get(app.config['TEST_SERVICE_URL'])
 
     def tearDown(self):
         db.session.remove()
@@ -61,7 +61,7 @@ class Test(unittest.TestCase):
 
 
     def testRegistration(self):
-        self.driver.get('http://127.0.0.1:5000/auth/register')
+        self.driver.get(app.config['TEST_SERVICE_URL'] + '/auth/register')
         username = self.driver.find_element(By.ID, "username")
         name = self.driver.find_element(By.ID, "name")
         email = self.driver.find_element(By.ID, "email")
@@ -82,7 +82,7 @@ class Test(unittest.TestCase):
 
     def testResetPassword(self):
         user = self.createUser()
-        self.driver.get('http://127.0.0.1:5000/auth/login')
+        self.driver.get(app.config['TEST_SERVICE_URL'] + '/auth/login')
         reset = self.driver.find_element(By.ID, "resetPassword")
         reset.click()
         email = WebDriverWait(self.driver, 10).until(
@@ -101,7 +101,7 @@ class Test(unittest.TestCase):
     def testChangePassword(self):
         user = self.createUser()
         self.login(user)
-        self.driver.get('http://127.0.0.1:5000/auth/change_password')
+        self.driver.get(app.config['TEST_SERVICE_URL'] + '/auth/change_password')
         current_password = WebDriverWait(self.driver, 10).until(
             EC.visibility_of_element_located((By.ID, "current_password"))
         )
@@ -122,7 +122,7 @@ class Test(unittest.TestCase):
     def testViewProfile(self):
         user = self.createUser()
         self.login(user)
-        self.driver.get('http://127.0.0.1:5000/users/user/' + user.username)
+        self.driver.get(app.config['TEST_SERVICE_URL'] + '/users/user/' + user.username)
         username = WebDriverWait(self.driver, 10).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, "#profile .username"))
         )
@@ -133,7 +133,7 @@ class Test(unittest.TestCase):
     def testEditProfile(self):
         user = self.createUser()
         self.login(user)
-        self.driver.get('http://127.0.0.1:5000/users/edit_profile')
+        self.driver.get(app.config['TEST_SERVICE_URL'] + '/users/edit_profile')
         aboutMe = WebDriverWait(self.driver, 10).until(
             EC.visibility_of_element_located((By.ID, "about_me"))
         )
@@ -151,7 +151,7 @@ class Test(unittest.TestCase):
     def testGenerateImage(self):
         user = self.createUser()
         self.login(user)
-        self.driver.get('http://127.0.0.1:5000/products/sell')
+        self.driver.get(app.config['TEST_SERVICE_URL'] + '/products/sell')
         button = WebDriverWait(self.driver, 10).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, ".generate-image"))
         )
@@ -191,7 +191,7 @@ class Test(unittest.TestCase):
         user2 = self.createUser('Ivan', 'ivan@mail.ru', 'student')
         product1, product2 = self.createProducts(2)
         self.login(user)
-        self.driver.get('http://127.0.0.1:5000/products/buy')
+        self.driver.get(app.config['TEST_SERVICE_URL'] + '/products/buy')
 
         product = WebDriverWait(self.driver, 20).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, ".product-listing .card.area[data-id='" + str(product1.id) + "']"))
@@ -227,7 +227,7 @@ class Test(unittest.TestCase):
         user = self.createUser()
         product1, product2 = self.createProducts(1, 1, True)
         self.login(user)
-        self.driver.get('http://127.0.0.1:5000/products/my_purchases')
+        self.driver.get(app.config['TEST_SERVICE_URL'] + '/products/my_purchases')
 
         product = WebDriverWait(self.driver, 20).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, ".product-listing .card.area[data-id='" + str(product1.id) + "']"))
@@ -246,7 +246,7 @@ class Test(unittest.TestCase):
         user = self.createUser()
         product1, product2 = self.createProducts(1)
         self.login(user)
-        self.driver.get('http://127.0.0.1:5000/products/sell')
+        self.driver.get(app.config['TEST_SERVICE_URL'] + '/products/sell')
 
         product = WebDriverWait(self.driver, 20).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, ".product-listing .card.area[data-id='" + str(product1.id) + "']"))
@@ -277,7 +277,7 @@ class Test(unittest.TestCase):
         return db.session.get(User, user.id)
 
     def login(self, user):
-        self.driver.get('http://127.0.0.1:5000/auth/login')
+        self.driver.get(app.config['TEST_SERVICE_URL'] + '/auth/login')
         username = self.driver.find_element(By.ID, "username")
         password = self.driver.find_element(By.ID, "password")
         submit = self.driver.find_element(By.ID, "submit")
