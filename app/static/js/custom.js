@@ -14,10 +14,18 @@ $(document).ready(function () {
     const generateForm = $('#generateForm');
     const generateModal = $('#generateModal');
     const overlay = $('#overlay');
+    let balanceElement = $('#user-main-balance')
+
+    
     generateForm.on('submit', function (e) {
         e.preventDefault();
         overlay.show();
         var url = '/products/generate_product';
+        let money = parseInt(balanceElement.text().replace("$", ""));
+        let image_generation_cost = parseInt($('.generate-image-reward-point').text().replace('$', ''));
+        var newBalance = money - image_generation_cost;
+
+
         $.ajax({
             url: url,
             type: 'POST',
@@ -28,6 +36,7 @@ $(document).ready(function () {
                 price: $('#price').val().trim()
             }),
             success: function (response) {
+                balanceElement.text('$' + newBalance)
                 generateForm.trigger("reset");
                 generateModal.modal('hide');
                 overlay.hide();

@@ -32,7 +32,7 @@ def sell():
     prev_url = url_for('products.sell', page=products.prev_num) if products.has_prev else None
 
     # Rendering sell page with products and pagination links
-    return render_template('products/sell.html', title='Sell items', searchPath=url_for('products.sell'),
+    return render_template('products/sell.html', title='Sell items', generate_reward_point = current_app.config['REWARD_MONEY_FOR_GENERATE_PRODUCT'], searchPath=url_for('products.sell'),
                            products=products.items, next_url=next_url,
                            prev_url=prev_url)
 
@@ -49,7 +49,12 @@ def generate_product():
 
     unsold_image_count = Product.query.filter_by(seller_id=current_user.id, is_sold = False).count()
     if unsold_image_count >=10:
-        return jsonify({'success': False, 'message': 'You\'ve reached the maximum limit of unsold images. Please sell something first before adding more.'}), 400
+        return jsonify({'success': False, 'message': 'You have reached the maximum limit of unsold images. Please sell something first before adding more.'}), 400
+
+    # Check if user has enough balance in his account
+    user = db.session.get(User, int(current_user.id))
+    if (int(user.money) < int(current_app.config['REWARD_MONEY_FOR_GENERATE_PRODUCT'])):
+        return jsonify({'success': False, 'message': 'Sorry, you do not have enough balance to generate a new image.'}), 400
 
     # Extracting product details from JSON data
     name = data.get('name')
