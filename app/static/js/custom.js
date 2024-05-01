@@ -1,10 +1,18 @@
+/**
+ * This JavaScript file contains custom client-side code for BuySell web application.
+ */
+
+// Execute when the DOM is fully loaded
 $(document).ready(function () {
+    
+    // Disable submit button on form submission
     $('form').on('submit', function () {
-        const submit = $('#submit');
-        submit.prop('disabled', true);
-        submit.text('Loading...');
+        disableSubmitBtn(true);
     });
-    const generateForm = $('#generateModal');
+
+    // Handle form submission for generating a product
+    const generateForm = $('#generateForm');
+    const generateModal = $('#generateModal');
     const overlay = $('#overlay');
     generateForm.on('submit', function (e) {
         e.preventDefault();
@@ -21,8 +29,9 @@ $(document).ready(function () {
             }),
             success: function (response) {
                 generateForm.trigger("reset");
-                generateForm.modal('hide');
+                generateModal.modal('hide');
                 overlay.hide();
+                disableSubmitBtn(false);
                 renderImage($('.products'), response.data);
             },
             error: function (xhr, status, error) {
@@ -31,34 +40,34 @@ $(document).ready(function () {
                 } else {
                     alertInfo(error);
                 }
-                generateForm.modal('hide');
+                generateModal.modal('hide');
                 overlay.hide();
+                disableSubmitBtn(false);
             }
         });
     });
-  $('.counter span').each(function() {
-    const $span = $(this);
-    const count = $span.data('count');
-    $({ counter: 0 }).animate({ counter: count }, {
-      duration: 1000,
-      step: function() {
-        $span.css('--num', Math.ceil(this.counter));
-      }
+
+    // Counter animation for each span element
+    $('.counter span').each(function() {
+        const $span = $(this);
+        const count = $span.data('count');
+        $({ counter: 0 }).animate({ counter: count }, {
+            duration: 1000,
+            step: function() {
+                $span.css('--num', Math.ceil(this.counter));
+            }
+        });
     });
-  });
 
-  // Implement clear search function when clicking on clear x icon
+    // Clear search function when clicking on clear icon
     const searchInput = document.getElementById('nav-search-input');
-
-    // Add an input event listener
     searchInput.addEventListener('input', function(event) {
-        // Check if the input value is empty
         if (event.target.value === '') {
-            $(searchInput).parent('form').submit()
+            $(searchInput).parent('form').submit();
         }
     });
 
-
+    // Configure slick carousel for latest images display
     $('.latest-images-carousel').slick({
         dots: true,
         infinite: false,
@@ -96,8 +105,21 @@ $(document).ready(function () {
             }
         ]
     });
+
+    // Hide alert after specified time
+    hideAlert(5000);
+    // Enable submit button
+    disableSubmitBtn(false);
+
+    // Reload page on pageshow event
+    $(window).on('pageshow', function(event) {
+        if (event.originalEvent.persisted) {
+            window.location.reload();
+        }
+    });
 });
 
+// Function to transfer data to modal
 function transferDataToModal(elem) {
     const id = elem.getAttribute('data-id');
     const name = elem.getAttribute('data-name');
@@ -108,6 +130,7 @@ function transferDataToModal(elem) {
     confirmButton.setAttribute('onclick', `buyImage('${id}')`);
 }
 
+// Function to handle buying an image
 function buyImage(id) {
     const url = id + '/buy';
     $.ajax({
@@ -131,11 +154,12 @@ function buyImage(id) {
     });
 }
 
+// Function to render an image
 function renderImage(obj, data) {
     $(obj).prepend(`<div data-id="${data.id}" class="card area new">
             <img alt="${data.name}" class="card-img-top" src="/static/images/nft/${data.image}">
             <div class="card-body">
-                <h6 class="card-title">${data.name} <span class="category">(${data.category})</span></h6>
+                <h6 class="card-title">` + truncate(data.name, 7) + ` <span class="category">(${data.category})</span></h6>
                 <p class="card-text">
                     <small class="price">$${data.price}</small> •
                     <small>${data.timestamp}</small>
@@ -154,12 +178,36 @@ function renderImage(obj, data) {
         </div>`);
 }
 
+function truncate(string, maxLength) {
+    if (string.length > maxLength) {
+        return string.substring(0, maxLength) + "...";
+    } else {
+        return string;
+    }
+}
+
+// Function to display alert message
 function alertInfo(message) {
-    $('.base').prepend('<div class="alert alert-info alert-auto-disappear" role="alert" id="alert">' + message + '</div>');
+    $('.base').prepend('<div class="alert-message alert alert-info alert-auto-disappear" role="alert" id="alert">' + message + '</div>');
+    hideAlert(5000);
+}
+
+// Function to hide alert after specified time
+function hideAlert(time){
     setTimeout(function() {
         $('.alert-auto-disappear').fadeOut('slow', function() {
             $(this).remove();
         });
-    }, 5000);
+    }, time);
 }
 
+// Function to enable/disable submit button
+function disableSubmitBtn(disable) {
+    const submit = $('#submit');
+    submit.prop('disabled', disable);
+    if(disable) {
+        submit.text('Loading...');
+    } else {
+        submit.text(submit.data('text'));
+    }
+}
