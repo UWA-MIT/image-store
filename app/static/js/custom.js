@@ -110,10 +110,17 @@ function transferDataToModal(elem) {
 
 function buyImage(id) {
     const url = id + '/buy';
+    let balanceElement = $('#user-main-balance')
+    var money = parseInt(balanceElement.text().replace("$", ""));
+    var price = parseInt($('[data-id="' + id + '"]').find('.price').text().replace('$', ''));
+    var newBalance = money - price;
+
     $.ajax({
         url: url,
         type: 'GET',
         success: function (response) {
+            balanceElement.text('$' + newBalance)
+
             alertInfo(response.message);
             if (response.success) {
                 $('[data-id="' + id + '"].card.area').remove();
@@ -127,8 +134,8 @@ function buyImage(id) {
                 alertInfo(error);
             }
             $('#buyModal').modal('hide');
-        }
-    });
+        }
+    });
 }
 
 function renderImage(obj, data) {
