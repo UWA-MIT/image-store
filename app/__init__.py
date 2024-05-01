@@ -30,6 +30,11 @@ def create_app(config_class=Config):
     Returns:
         Flask: The configured Flask application.
     """
+
+    if os.environ.get('FLASK_CONFIG') == 'test':
+        config_class = TestConfig
+        print("!!! TestConfig !!!")
+
     # Set up Flask app
     app = Flask(__name__)
     app.config.from_object(config_class)

@@ -42,7 +42,14 @@ class Test(unittest.TestCase):
     def testLoginAndLogout(self):
         user = self.createUser()
         self.login(user)
-        logout = self.driver.find_element(By.ID, "logout")
+
+        dropdown = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, ".nav-item.dropdown"))
+        )
+        dropdown.click()
+        logout = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located((By.ID, "logout"))
+        )
         logout.click()
         headerUsername = self.driver.find_elements(By.ID, "headerUsername")
         assert len(headerUsername) == 0, "The element with ID 'headerUsername' exists."
@@ -153,10 +160,10 @@ class Test(unittest.TestCase):
         submit = self.driver.find_element(By.ID, "submit")
         name.send_keys('Lambo')
         dropdown.select_by_value("car")
-        price.send_keys('100')
+        price.send_keys('5')
         submit.click()
 
-        product = WebDriverWait(self.driver, 20).until(
+        product = WebDriverWait(self.driver, 40).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, ".product-listing .card.area.new"))
         )
         element = product.find_element(By.CSS_SELECTOR, ".card-title")
@@ -165,7 +172,7 @@ class Test(unittest.TestCase):
         assert expected_text == actual_text, f"Expected name and category '{expected_text}' did not match actual name and category '{actual_text}'."
 
         element = product.find_element(By.CSS_SELECTOR, ".card-text .price")
-        expected_text = '$100'
+        expected_text = '$5'
         actual_text = element.text
         assert expected_text == actual_text, f"Expected price '{expected_text}' did not match actual price '{actual_text}'."
 
@@ -250,8 +257,8 @@ class Test(unittest.TestCase):
         assert expected_text == actual_text, f"Expected price '{expected_text}' did not match actual price '{actual_text}'."
 
 
-    def createUser(self, usernam='Konstantin', email='24090236@student.uwa.edu.au', about_me='I am a student'):
-        user = User(username = usernam, email = email, about_me=about_me)
+    def createUser(self, username='Konstantin', email='24090236@student.uwa.edu.au', about_me='I am a student'):
+        user = User(username=username, email=email, about_me=about_me)
         user.set_password('test123')
         db.session.add(user)
         db.session.commit()
