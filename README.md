@@ -179,6 +179,8 @@ webapp
 
 2. To run user tests (Selenium):
 
+
+
 	Run the app with **FLASK_CONFIG = 'test'** before running all tests.
 
 	```bash
@@ -191,6 +193,13 @@ webapp
 	```bash
 	python -m unittest usertests.Test.testEditProfile
 	```
+
+	---
+	**NOTE**
+
+	The Selenium tests only work for Windows users who have Chrome installed.
+
+	---
 
 ## Usage
 
