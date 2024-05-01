@@ -1,10 +1,10 @@
 /**
- * This JavaScript file contains client-side code for the user interface of a web application.
- * It handles various interactions and functionalities of the application.
+ * This JavaScript file contains custom client-side code for BuySell web application.
  */
 
 // Execute when the DOM is fully loaded
 $(document).ready(function () {
+    
     // Disable submit button on form submission
     $('form').on('submit', function () {
         disableSubmitBtn(true);
