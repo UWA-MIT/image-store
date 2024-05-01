@@ -47,6 +47,10 @@ def generate_product():
     if not data:
         return jsonify({'success': False, 'message': 'No data received'}), 400
 
+    unsold_image_count = Product.query.filter_by(seller_id=current_user.id, is_sold = False).count()
+    if unsold_image_count >=10:
+        return jsonify({'success': False, 'message': 'You\'ve reached the maximum limit of unsold images. Please sell something first before adding more.'}), 400
+
     # Extracting product details from JSON data
     name = data.get('name')
     category = data.get('category')
