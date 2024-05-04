@@ -77,6 +77,10 @@ class Reward(db.Model):
     def deductRewardForPurchase(user_id, product_id, amount):
         return Reward.applyReward(reason=f"Purchased an image (Ref# {product_id}).", amount=int(amount), reward_type="Debit", user_id=user_id)
 
+    # Method to award reward for a sale event
+    def addRewardForSaleItem(user_id, product_id, amount):
+        return Reward.applyReward(reason=f"Sale of an image (Ref# {product_id}).", amount=int(amount), reward_type="Credit", user_id=user_id)
+
     # Method to add reward for purchasing from the same user multiple times
     def addRewardForPurchaseFromSameUserIfApplicable(user_id, product_id, seller_id):
         number_of_purchases = current_app.config['PURCHASE_COUNT_FOR_SAME_USER']
