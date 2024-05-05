@@ -140,6 +140,9 @@ def buy_product(product_id):
     # Deducting reward points for purchase and updating user's money balance
     Reward.deductRewardForPurchase(current_user.id, product.id, int(round(product.price)))
 
+    # Add reward points to seller for purchase
+    Reward.addRewardForSaleItem(product.seller_id, product.id, int(round(product.price)))    
+
     # Adding reward points for multiple purchases from same user or category
     Reward.addRewardForPurchaseFromSameUserIfApplicable(current_user.id, product.id, product.seller_id)
     Reward.addRewardForPurchaseFromSameUserIfApplicable(current_user.id, product.id, product.category)

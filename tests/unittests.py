@@ -93,6 +93,15 @@ class Test(unittest.TestCase):
         reward = Reward.query.filter_by(user_id=1, reason=f"Purchased an image (Ref# {product.id}).").first()
         self.assertIsNotNone(reward)
 
+    def testAddRewardForSaleItem(self):
+        product = Product(name='TestProduct', category='TestCategory', price=10, buyer_id=1)
+        db.session.add(product)
+        db.session.commit()
+        result = Reward.addRewardForSaleItem(user_id=product.buyer_id, product_id=product.id, amount=100)
+        self.assertTrue(result)
+        reward = Reward.query.filter_by(user_id=1, reward_type='Credit', reason=f"Sale of an image (Ref# {product.id}).").first()
+        self.assertIsNotNone(reward)
+
     def testAddRewardForPurchaseFromSameUserIfApplicable(self):
         seller = User(username='TestSeller', email='testseller@mail.com')
         db.session.add(seller)
