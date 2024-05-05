@@ -272,7 +272,7 @@ textarea {
 
 .product-listing .area img {
     object-fit: cover;
-    object-position: top;
+    object-position: center;
     max-height: 150px;
 }
 
