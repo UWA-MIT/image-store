@@ -29,7 +29,7 @@ Allow users to sell ("making a request") and buy ("answering the request") NFT-l
 
 ### Video
 
-[![BuySell](https://img.youtube.com/vi/BrLDLtskWzQ/maxresdefault.jpg)](https://www.youtube.com/watch?v=BrLDLtskWzQ "BuySell v2.0.0")
+[![BuySell](https://img.youtube.com/vi/r6vSv8j6ANs/maxresdefault.jpg)](https://youtu.be/r6vSv8j6ANs "BuySell - AI-driven Marketplace (v3.0.0)")
 
 ### Application architecture
 
